@@ -17,12 +17,13 @@ import org.apache.sshd.server.keyprovider.SimpleGeneratorHostKeyProvider;
  * @author <a href="mailto:peter.royal@pobox.com">peter royal</a>
  */
 public class Main {
+    private static final String CONFIG_DIR = System.getProperty("user.dir");
 
     public static void main( String... args ) throws Exception {
         final SshServer server = SshServer.setUpDefaultServer();
 
         server.setPort( 2222 );
-        server.setKeyPairProvider( new SimpleGeneratorHostKeyProvider() );
+        server.setKeyPairProvider( new SimpleGeneratorHostKeyProvider(CONFIG_DIR + "/shjgit.hostkeys") );
         server.setShellFactory( new NoShell() );
         server.setCommandFactory( new GitCommandFactory() );
         server.setUserAuthFactories( Collections.<NamedFactory<UserAuth>>singletonList(
