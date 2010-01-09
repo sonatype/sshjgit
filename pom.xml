@@ -60,7 +60,7 @@
                 <artifactId>onejar-maven-plugin</artifactId>
                 <version>1.4.1</version>
                 <configuration>
-                    <mainClass>com.sonatype.shjgit.Main</mainClass>
+                    <mainClass>com.sonatype.shjgit.standalone.Main</mainClass>
                     <filename>${project.build.finalName}-standalone.jar</filename>
                 </configuration>
                 <executions>

@@ -1,4 +1,4 @@
-package com.sonatype.shjgit;
+package com.sonatype.shjgit.standalone;
 
 import com.sonatype.shjgit.core.ServerFactory;
 import org.apache.shiro.cache.DefaultCacheManager;
