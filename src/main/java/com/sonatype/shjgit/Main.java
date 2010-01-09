@@ -2,14 +2,14 @@ package com.sonatype.shjgit;
 
 import java.util.Collections;
 
+import org.apache.shiro.cache.DefaultCacheManager;
+import org.apache.shiro.mgt.DefaultSecurityManager;
+import org.apache.shiro.mgt.SecurityManager;
+import org.apache.shiro.realm.SimpleAccountRealm;
 import org.apache.sshd.SshServer;
 import org.apache.sshd.common.NamedFactory;
 import org.apache.sshd.server.UserAuth;
 import org.apache.sshd.server.keyprovider.SimpleGeneratorHostKeyProvider;
-import org.jsecurity.cache.HashtableCacheManager;
-import org.jsecurity.mgt.DefaultSecurityManager;
-import org.jsecurity.mgt.SecurityManager;
-import org.jsecurity.realm.SimpleAccountRealm;
 
 /**
  * Main entry point
@@ -26,7 +26,7 @@ public class Main {
         server.setShellFactory( new NoShell() );
         server.setCommandFactory( new GitCommandFactory() );
         server.setUserAuthFactories( Collections.<NamedFactory<UserAuth>>singletonList(
-            new JSecurityManagerAuthenticator.Factory( createSecurityManager() ) ) );
+            new ShiroSecurityManagerAuthenticator.Factory( createSecurityManager() ) ) );
 
         server.start();
 
@@ -48,7 +48,7 @@ public class Main {
 
         DefaultSecurityManager securityManager = new DefaultSecurityManager( realm );
 
-        securityManager.setCacheManager( new HashtableCacheManager() );
+        securityManager.setCacheManager( new DefaultCacheManager() );
 
         realm.addAccount( System.getProperty( "user.name" ), "test", "shjgit" );
 

@@ -17,7 +17,7 @@ package com.sonatype.shjgit;
 import java.io.File;
 import java.io.IOException;
 
-import org.jsecurity.subject.Subject;
+import org.apache.shiro.subject.Subject;
 import org.eclipse.jgit.lib.Repository;
 
 abstract class AbstractGitCommand extends AbstractCommand {
@@ -46,7 +46,7 @@ abstract class AbstractGitCommand extends AbstractCommand {
         repo = new Repository( new File( projectName ) );
         repo.create();
 
-        userAccount = session.getAttribute( JSecurityManagerAuthenticator.SUBJECT );
+        userAccount = session.getAttribute( ShiroSecurityManagerAuthenticator.SUBJECT );
 
         try {
             runImpl();

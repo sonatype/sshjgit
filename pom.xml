@@ -29,9 +29,13 @@
         </dependency>
 
         <dependency>
-            <groupId>org.jsecurity</groupId>
-            <artifactId>jsecurity</artifactId>
-            <version>0.9.0</version>
+            <groupId>org.apache.shiro</groupId>
+            <artifactId>shiro-core</artifactId>
+            <version>1.0-incubating-SNAPSHOT</version>
+            <!--
+            Currently, you have to build Shiro from source yourself.
+            See http://incubator.apache.org/shiro/download.html
+            -->
         </dependency>
 
         <dependency>

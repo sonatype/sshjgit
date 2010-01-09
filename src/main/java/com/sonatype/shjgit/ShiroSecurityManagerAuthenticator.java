@@ -1,30 +1,30 @@
 package com.sonatype.shjgit;
 
+import org.apache.shiro.authc.AuthenticationException;
+import org.apache.shiro.authc.UsernamePasswordToken;
+import org.apache.shiro.mgt.SecurityManager;
+import org.apache.shiro.subject.Subject;
 import org.apache.sshd.common.NamedFactory;
 import org.apache.sshd.common.Session;
 import org.apache.sshd.common.util.Buffer;
 import org.apache.sshd.server.PasswordAuthenticator;
 import org.apache.sshd.server.UserAuth;
 import org.apache.sshd.server.session.ServerSession;
-import org.jsecurity.authc.AuthenticationException;
-import org.jsecurity.authc.UsernamePasswordToken;
-import org.jsecurity.mgt.SecurityManager;
-import org.jsecurity.subject.Subject;
 
 /**
- * A {@link PasswordAuthenticator} that delegates to a JSecurity {@link SecurityManager}
+ * A {@link PasswordAuthenticator} that delegates to a Shiro {@link SecurityManager}
  *
  * @author <a href="mailto:peter.royal@pobox.com">peter royal</a>
  */
-public class JSecurityManagerAuthenticator implements UserAuth {
+public class ShiroSecurityManagerAuthenticator implements UserAuth {
     public static final Session.AttributeKey<Subject> SUBJECT = new Session.AttributeKey<Subject>();
 
-    private final org.jsecurity.mgt.SecurityManager securityManager;
+    private final SecurityManager securityManager;
 
     public static class Factory implements NamedFactory<UserAuth> {
-        private final org.jsecurity.mgt.SecurityManager securityManager;
+        private final SecurityManager securityManager;
 
-        public Factory( org.jsecurity.mgt.SecurityManager securityManager ) {
+        public Factory( SecurityManager securityManager ) {
             this.securityManager = securityManager;
         }
 
@@ -35,11 +35,11 @@ public class JSecurityManagerAuthenticator implements UserAuth {
 
         @Override
         public UserAuth create() {
-            return new JSecurityManagerAuthenticator( securityManager );
+            return new ShiroSecurityManagerAuthenticator( securityManager );
         }
     }
 
-    public JSecurityManagerAuthenticator( org.jsecurity.mgt.SecurityManager securityManager ) {
+    public ShiroSecurityManagerAuthenticator( SecurityManager securityManager ) {
         this.securityManager = securityManager;
     }
 
@@ -52,7 +52,8 @@ public class JSecurityManagerAuthenticator implements UserAuth {
         String password = buffer.getString();
 
         try {
-            Subject subject = securityManager.login( new UsernamePasswordToken( username, password ) );
+            Subject subject = securityManager.getSubject();
+            subject.login( new UsernamePasswordToken( username, password ) );
 
             session.setAttribute( SUBJECT, subject );
 
