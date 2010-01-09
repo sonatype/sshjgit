@@ -18,7 +18,7 @@ import java.io.File;
 import java.io.IOException;
 
 import org.jsecurity.subject.Subject;
-import org.spearce.jgit.lib.Repository;
+import org.eclipse.jgit.lib.Repository;
 
 abstract class AbstractGitCommand extends AbstractCommand {
     protected Repository repo;

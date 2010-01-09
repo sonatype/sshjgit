@@ -16,6 +16,7 @@ package com.sonatype.shjgit;
 
 import java.util.HashMap;
 
+import org.apache.sshd.server.Command;
 import org.apache.sshd.server.CommandFactory;
 
 /** Creates a command implementation based on the client input. */
@@ -76,6 +77,10 @@ public class GitCommandFactory implements CommandFactory {
             @Override
             protected void run( String[] argv ) throws Failure {
                 throw new Failure( 127, "gerrit: " + getName() + ": not found" );
+            }
+
+            @Override
+            public void destroy() {
             }
         };
     }

@@ -15,8 +15,8 @@ package com.sonatype.shjgit;
 
 import java.io.IOException;
 
-import org.spearce.jgit.lib.PersonIdent;
-import org.spearce.jgit.transport.ReceivePack;
+import org.eclipse.jgit.lib.PersonIdent;
+import org.eclipse.jgit.transport.ReceivePack;
 
 /** Receives change upload over SSH using the Git receive-pack protocol. */
 class Receive extends AbstractGitCommand {
@@ -49,4 +49,7 @@ class Receive extends AbstractGitCommand {
         return new Failure( 1, builder.toString() );
     }
 
+    @Override
+    public void destroy() {
+    }
 }

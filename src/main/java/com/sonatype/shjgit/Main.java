@@ -33,7 +33,10 @@ public class Main {
         Runtime.getRuntime().addShutdownHook( new Thread() {
             @Override
             public void run() {
-                server.stop();
+                try {
+                    server.stop();
+                } catch (InterruptedException ignore) {
+                }
             }
         } );
     }

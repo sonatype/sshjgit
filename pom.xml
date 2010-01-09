@@ -10,6 +10,11 @@
     <version>1.0-SNAPSHOT</version>
     <name>shjgit-server</name>
 
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <java.lang.version>6</java.lang.version>
+    </properties>
+
     <dependencies>
         <dependency>
             <groupId>org.eclipse.jgit</groupId>
@@ -36,4 +41,28 @@
         </dependency>
 
     </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                    <source>1.${java.lang.version}</source>
+                    <target>1.${java.lang.version}</target>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+
+    <repositories>
+        <repository>
+            <!--
+            jgit 0.5.0 is available here, released from branch
+            'git-release' at http://github.com/sonatype/JGit
+            -->
+            <id>people.struberg.repo</id>
+            <url>http://people.apache.org/~struberg/staging-repo</url>
+        </repository>
+    </repositories>
+
 </project>
