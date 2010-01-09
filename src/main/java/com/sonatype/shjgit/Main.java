@@ -1,5 +1,6 @@
 package com.sonatype.shjgit;
 
+import com.sonatype.shjgit.core.ServerFactory;
 import org.apache.shiro.cache.DefaultCacheManager;
 import org.apache.shiro.mgt.DefaultSecurityManager;
 import org.apache.shiro.mgt.SecurityManager;

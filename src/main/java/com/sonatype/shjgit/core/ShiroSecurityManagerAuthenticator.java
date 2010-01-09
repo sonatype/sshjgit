@@ -1,4 +1,4 @@
-package com.sonatype.shjgit;
+package com.sonatype.shjgit.core;
 
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.UsernamePasswordToken;
