@@ -76,7 +76,7 @@ public class GitCommandFactory implements CommandFactory {
         return new AbstractCommand() {
             @Override
             protected void run( String[] argv ) throws Failure {
-                throw new Failure( 127, "gerrit: " + getName() + ": not found" );
+                throw new Failure( 127, "shjgit: " + getName() + ": not found" );
             }
 
             @Override
