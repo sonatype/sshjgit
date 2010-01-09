@@ -1,15 +1,10 @@
 package com.sonatype.shjgit;
 
-import java.util.Collections;
-
 import org.apache.shiro.cache.DefaultCacheManager;
 import org.apache.shiro.mgt.DefaultSecurityManager;
 import org.apache.shiro.mgt.SecurityManager;
 import org.apache.shiro.realm.SimpleAccountRealm;
 import org.apache.sshd.SshServer;
-import org.apache.sshd.common.NamedFactory;
-import org.apache.sshd.server.UserAuth;
-import org.apache.sshd.server.keyprovider.SimpleGeneratorHostKeyProvider;
 
 /**
  * Main entry point
@@ -20,15 +15,10 @@ public class Main {
     private static final String CONFIG_DIR = System.getProperty("user.dir");
 
     public static void main( String... args ) throws Exception {
-        final SshServer server = SshServer.setUpDefaultServer();
 
-        server.setPort( 2222 );
-        server.setKeyPairProvider( new SimpleGeneratorHostKeyProvider(CONFIG_DIR + "/shjgit.hostkeys") );
-        server.setShellFactory( new NoShell() );
-        server.setCommandFactory( new GitCommandFactory() );
-        server.setUserAuthFactories( Collections.<NamedFactory<UserAuth>>singletonList(
-            new ShiroSecurityManagerAuthenticator.Factory( createSecurityManager() ) ) );
-
+        final SshServer server = new ServerFactory().createDefaultServer(
+                CONFIG_DIR, 2222, createSecurityManager());
+        
         server.start();
 
         Runtime.getRuntime().addShutdownHook( new Thread() {
