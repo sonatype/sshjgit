@@ -55,9 +55,12 @@ abstract class AbstractGitCommand extends AbstractCommand {
                     "'subdir/subsubdir/project3'.");
         }
 
+        // TODO: Should we have a locking mechanism, so no two clients can work with the same repo at the same time? Is it handled by JGit internally already?
         repo = new Repository( new File( projectName ) );
         final RepositoryConfig repositoryConfig = repo.getConfig();
         if (!repositoryConfig.getFile().exists()) {
+            // TODO: Check so any of the parent directories in the path leading up to this location, doesn't already contain a repo.
+            // TODO: Check Subject's permission to create a new repo in this directory.
             repo.create();
         }
 

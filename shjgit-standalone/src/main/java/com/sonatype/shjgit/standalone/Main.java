@@ -10,6 +10,8 @@ import org.apache.sshd.SshServer;
 /**
  * Main entry point
  *
+ * // TODO: This class should either be made more generic, or be considered a sample.
+ *
  * @author <a href="mailto:peter.royal@pobox.com">peter royal</a>
  */
 public class Main {

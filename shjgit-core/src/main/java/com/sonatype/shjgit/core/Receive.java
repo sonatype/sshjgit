@@ -22,8 +22,10 @@ import org.eclipse.jgit.transport.ReceivePack;
 class Receive extends AbstractGitCommand {
     @Override
     protected void runImpl() throws IOException, Failure {
+        // TODO: Check Subject's permission to push to this repo.
         ReceivePack rp = new ReceivePack( repo );
         rp.setAllowCreates( true );
+        // TODO: Check Subject's permission to non-fast-forward. (delete is just an extreme form of non-fast-forward) NOTE: Don't fail if they lack that permission, just set these two to false:
         rp.setAllowDeletes( true );
         rp.setAllowNonFastForwards( true );
         rp.setCheckReceivedObjects( true );

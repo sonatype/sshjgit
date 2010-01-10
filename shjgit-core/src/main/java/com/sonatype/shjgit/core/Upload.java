@@ -21,6 +21,7 @@ import java.io.IOException;
 class Upload extends AbstractGitCommand {
     @Override
     protected void runImpl() throws IOException, Failure {
+        // TODO: Check Subject's permission to read from this repo.
         UploadPack up = new UploadPack( repo );
         up.upload( in, out, err );
     }
