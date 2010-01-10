@@ -14,16 +14,32 @@ import java.util.Collections;
  * @author hugo@josefson.org
  */
 public class ServerFactory {
+    /**
+     * Constructs a default configured {@link SshServer} for serving up Git repositories.
+     *
+     * @param configDir directory where ssh server keys will be loaded/saved. {@code null} if they should not be loaded/saved.
+     * @param port which port the ssh server should bind to.
+     * @param securityManager the Shiro {@code SecurityManager} which you have preconfigured for authenticating users.
+     * @return an {@code SshServer}, ready for you to {@link org.apache.sshd.SshServer#start()}. Please {@link org.apache.sshd.SshServer#stop()} it when it's time for your application to shut down.
+     */
     public SshServer createDefaultServer(String configDir, int port, SecurityManager securityManager) {
         final SshServer server = SshServer.setUpDefaultServer();
 
         server.setPort( port );
-        server.setKeyPairProvider( new SimpleGeneratorHostKeyProvider(configDir + "/shjgit.hostkeys") );
+        server.setKeyPairProvider( createHostKeyProvider( configDir ) );
         server.setShellFactory( new NoShell() );
         server.setCommandFactory( new GitCommandFactory() );
         server.setUserAuthFactories( Collections.<NamedFactory<UserAuth>>singletonList(
             new ShiroSecurityManagerAuthenticator.Factory( securityManager ) ) );
 
         return server;
+    }
+
+    private SimpleGeneratorHostKeyProvider createHostKeyProvider( String configDir ) {
+        if ( configDir == null ){
+            return new SimpleGeneratorHostKeyProvider( null );
+        }else{
+            return new SimpleGeneratorHostKeyProvider( configDir + "/shjgit.hostkeys" );
+        }
     }
 }
