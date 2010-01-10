@@ -24,6 +24,8 @@ import org.eclipse.jgit.lib.RepositoryConfig;
 abstract class AbstractGitCommand extends AbstractCommand {
     protected Repository repo;
     protected Subject userAccount;
+    private static final String VALID_PROJECTNAME_REGEX =
+            "[a-zA-Z0-9_][a-zA-Z0-9_.-]*(/[a-zA-Z0-9_][a-zA-Z0-9_.-]*)*";
 
     @Override
     protected final void run( String[] args ) throws IOException, Failure {
@@ -41,6 +43,16 @@ abstract class AbstractGitCommand extends AbstractCommand {
             // leading '/' but users might accidentally include them in Git URLs.
             //
             projectName = projectName.substring( 1 );
+        }
+        if (!projectName.matches(VALID_PROJECTNAME_REGEX)){
+            // Disallow dangerous project names which for example attempt to
+            // traverse directories backwards with ../../
+            // Unicode attacks is another example of things we filter out.
+            // Only way to safely avoid all these (and future) attacks, are
+            // by only allowing a known safe set of names.  
+            throw new Failure(2, "Disallowed project name. Valid project " +
+                    "names are for example 'project1', 'subdir/project2' and " +
+                    "'subdir/subsubdir/project3'.");
         }
 
         repo = new Repository( new File( projectName ) );
