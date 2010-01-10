@@ -32,6 +32,12 @@ public class GitCommandFactory implements CommandFactory {
                 return new Receive();
             }
         } );
+        commands.put( "git-upload-pack", new Factory() {
+            @Override
+            public AbstractCommand create() {
+                return new Upload();
+            }
+        } );
     }
 
     @Override
