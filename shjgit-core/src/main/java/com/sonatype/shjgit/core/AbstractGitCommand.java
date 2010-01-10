@@ -19,6 +19,7 @@ import java.io.IOException;
 
 import org.apache.shiro.subject.Subject;
 import org.eclipse.jgit.lib.Repository;
+import org.eclipse.jgit.lib.RepositoryConfig;
 
 abstract class AbstractGitCommand extends AbstractCommand {
     protected Repository repo;
@@ -42,9 +43,11 @@ abstract class AbstractGitCommand extends AbstractCommand {
             projectName = projectName.substring( 1 );
         }
 
-        // TODO we don't want to make a new repo every time :)
         repo = new Repository( new File( projectName ) );
-        repo.create();
+        final RepositoryConfig repositoryConfig = repo.getConfig();
+        if (!repositoryConfig.getFile().exists()) {
+            repo.create();
+        }
 
         userAccount = session.getAttribute( ShiroSecurityManagerAuthenticator.SUBJECT );
 
