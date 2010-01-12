@@ -7,16 +7,16 @@ import org.apache.shiro.subject.Subject;
 import org.apache.sshd.common.NamedFactory;
 import org.apache.sshd.common.Session;
 import org.apache.sshd.common.util.Buffer;
-import org.apache.sshd.server.PasswordAuthenticator;
 import org.apache.sshd.server.UserAuth;
 import org.apache.sshd.server.session.ServerSession;
 
 /**
- * A {@link PasswordAuthenticator} that delegates to a Shiro {@link SecurityManager}
+ * A {@link UserAuth} that delegates to a Shiro {@link SecurityManager} for
+ * authentication by password.
  *
  * @author <a href="mailto:peter.royal@pobox.com">peter royal</a>
  */
-public class ShiroSecurityManagerAuthenticator implements UserAuth {
+public class ShiroSecurityManagerUserAuthPassword implements UserAuth {
     public static final Session.AttributeKey<Subject> SUBJECT = new Session.AttributeKey<Subject>();
 
     private final SecurityManager securityManager;
@@ -35,11 +35,11 @@ public class ShiroSecurityManagerAuthenticator implements UserAuth {
 
         @Override
         public UserAuth create() {
-            return new ShiroSecurityManagerAuthenticator( securityManager );
+            return new ShiroSecurityManagerUserAuthPassword( securityManager );
         }
     }
 
-    public ShiroSecurityManagerAuthenticator( SecurityManager securityManager ) {
+    public ShiroSecurityManagerUserAuthPassword( SecurityManager securityManager ) {
         this.securityManager = securityManager;
     }
 

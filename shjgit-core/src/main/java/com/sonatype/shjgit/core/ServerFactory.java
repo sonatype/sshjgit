@@ -30,7 +30,7 @@ public class ServerFactory {
         server.setShellFactory( new NoShell() );
         server.setCommandFactory( new GitCommandFactory() );
         server.setUserAuthFactories( Collections.<NamedFactory<UserAuth>>singletonList(
-            new ShiroSecurityManagerAuthenticator.Factory( securityManager ) ) );
+            new ShiroSecurityManagerUserAuthPassword.Factory( securityManager ) ) );
 
         return server;
     }

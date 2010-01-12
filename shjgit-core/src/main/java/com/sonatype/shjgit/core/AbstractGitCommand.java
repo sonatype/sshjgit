@@ -64,7 +64,7 @@ abstract class AbstractGitCommand extends AbstractCommand {
             repo.create();
         }
 
-        userAccount = session.getAttribute( ShiroSecurityManagerAuthenticator.SUBJECT );
+        userAccount = session.getAttribute( ShiroSecurityManagerUserAuthPassword.SUBJECT );
 
         try {
             runImpl();
