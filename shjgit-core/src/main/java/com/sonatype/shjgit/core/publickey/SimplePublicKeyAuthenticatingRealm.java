@@ -4,7 +4,6 @@ import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.AuthenticationInfo;
 import org.apache.shiro.authc.AuthenticationToken;
 import org.apache.shiro.authc.SimpleAuthenticationInfo;
-import org.apache.shiro.authc.credential.CredentialsMatcher;
 import org.apache.shiro.authz.AuthorizationException;
 import org.apache.shiro.authz.Permission;
 import org.apache.shiro.realm.AuthenticatingRealm;
@@ -136,44 +135,4 @@ public class SimplePublicKeyAuthenticatingRealm extends AuthenticatingRealm {
         authorizingRealm.checkRoles(subjectPrincipal, roleIdentifiers);
     }
 
-    /**
-     * Matches authentication tokens which are {@link PublicKey}.
-     * 
-     * @author hugo@josefson.org
-     */
-    private class PublicKeyCredentialsMatcher implements CredentialsMatcher {
-
-        @Override
-        public boolean doCredentialsMatch(AuthenticationToken token, AuthenticationInfo info) {
-            PublicKeyWithEquals tokenKey = getTokenKey(token);
-            Collection<PublicKeyWithEquals> infoKeys = getInfoKeys(info);
-            for (PublicKeyWithEquals infoKey : infoKeys) {
-                if (infoKey.equals(tokenKey)){
-                    return true;
-                }
-            }
-            return false;
-        }
-
-
-        protected PublicKeyWithEquals getTokenKey(AuthenticationToken token) {
-            final PublicKeyAuthenticationToken publicKeyAuthentictionToken = (PublicKeyAuthenticationToken) token;
-            return new PublicKeyWithEquals(publicKeyAuthentictionToken.getCredentials());
-        }
-
-        protected Collection<PublicKeyWithEquals> getInfoKeys(AuthenticationInfo info) {
-            // TODO: check types so they are sure to be PublicKey
-            final Set<PublicKeyWithEquals> result = new HashSet<PublicKeyWithEquals>();
-            final Object credentials = info.getCredentials();
-            if (Collection.class.isAssignableFrom(credentials.getClass())){
-                Collection<PublicKey> credentialsCollection = (Collection<PublicKey>) credentials;
-                for (PublicKey publicKey : credentialsCollection) {
-                    result.add(new PublicKeyWithEquals(publicKey));
-                }
-            }else{
-                result.add(new PublicKeyWithEquals((PublicKey) credentials));
-            }
-            return result;
-        }
-    }
 }
