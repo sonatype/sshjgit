@@ -13,7 +13,7 @@ import org.apache.sshd.server.keyprovider.SimpleGeneratorHostKeyProvider;
 import java.util.Arrays;
 
 /**
- * Simple {@link SshServer} which serves Git repositories.
+ * Factory for constructing {@link SshServer}s which serve Git repositories.
  * 
  * @author hugo@josefson.org
  */
