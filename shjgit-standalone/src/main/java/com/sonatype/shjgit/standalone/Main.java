@@ -2,6 +2,7 @@ package com.sonatype.shjgit.standalone;
 
 import com.sonatype.shjgit.core.publickey.SimplePublicKeyAuthenticatingRealm;
 import com.sonatype.shjgit.core.ServerFactory;
+import org.apache.commons.io.FileUtils;
 import org.apache.mina.util.Base64;
 import org.apache.shiro.cache.DefaultCacheManager;
 import org.apache.shiro.mgt.DefaultSecurityManager;
@@ -11,11 +12,14 @@ import org.apache.shiro.realm.SimpleAccountRealm;
 import org.apache.sshd.SshServer;
 import org.apache.sshd.common.util.Buffer;
 
+import java.io.File;
+import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
 import java.security.NoSuchProviderException;
 import java.security.PublicKey;
 import java.security.spec.InvalidKeySpecException;
 import java.util.Arrays;
+import java.util.List;
 
 /**
  * Main entry point
@@ -46,7 +50,7 @@ public class Main {
         } );
     }
 
-    private static SecurityManager createSecurityManager() throws NoSuchProviderException, InvalidKeySpecException, NoSuchAlgorithmException {
+    private static SecurityManager createSecurityManager() throws NoSuchProviderException, InvalidKeySpecException, NoSuchAlgorithmException, IOException {
         final String username = System.getProperty("user.name");
 
         SimpleAccountRealm simpleAccountRealm = new SimpleAccountRealm("simpleAccountRealm");
@@ -63,8 +67,19 @@ public class Main {
         return securityManager;
     }
 
-    private static PublicKey loadDefaultPublicKey() throws NoSuchAlgorithmException, InvalidKeySpecException, NoSuchProviderException {
-        return new Buffer(Base64.decodeBase64("this would be the base64 encoded string from inside the id_rsa.pub file".getBytes())).getPublicKey();
+    private static PublicKey loadDefaultPublicKey() throws NoSuchAlgorithmException, InvalidKeySpecException, NoSuchProviderException, IOException {
+        List<String> lines = FileUtils.readLines(new File(System.getProperty("user.home") + "/.ssh/id_rsa.pub"));
+        final String base64encodedKey = extractKeyPart(lines.get(0));
+        return new Buffer(Base64.decodeBase64(base64encodedKey.getBytes())).getPublicKey();
+    }
+
+    /**
+     * Extracts the key part from a id_rsa.pub file.
+     * @param idRsaPubLine an enitire line of text from a public key file, such as id_rsa.pub
+     * @return just the long base64 encoded part in the middle
+     */
+    private static String extractKeyPart(String idRsaPubLine) {
+        return idRsaPubLine.split(" ")[1];
     }
 
 }
