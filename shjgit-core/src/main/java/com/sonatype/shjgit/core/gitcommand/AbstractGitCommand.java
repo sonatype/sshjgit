@@ -12,11 +12,12 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-package com.sonatype.shjgit.core;
+package com.sonatype.shjgit.core.gitcommand;
 
 import java.io.File;
 import java.io.IOException;
 
+import com.sonatype.shjgit.core.ShiroSecurityManagerUserAuthPassword;
 import org.apache.shiro.subject.Subject;
 import org.eclipse.jgit.lib.Repository;
 import org.eclipse.jgit.lib.RepositoryConfig;
