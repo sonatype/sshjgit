@@ -2,7 +2,6 @@ package com.sonatype.shjgit.core.publickey;
 
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.mgt.SecurityManager;
-
 import org.apache.shiro.subject.Subject;
 import org.apache.sshd.server.PublickeyAuthenticator;
 import org.apache.sshd.server.session.ServerSession;

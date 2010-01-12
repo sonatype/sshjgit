@@ -1,7 +1,5 @@
 package com.sonatype.shjgit.core.publickey;
 
-import com.sonatype.shjgit.core.publickey.PublicKeyAuthenticationToken;
-import com.sonatype.shjgit.core.publickey.PublicKeyWithEquals;
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.AuthenticationInfo;
 import org.apache.shiro.authc.AuthenticationToken;
