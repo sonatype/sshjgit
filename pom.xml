@@ -3,37 +3,53 @@
 
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.sonatype.shjgit</groupId>
-    <artifactId>shjgit-server</artifactId>
+    <artifactId>shjgit</artifactId>
 
-    <packaging>jar</packaging>
+    <packaging>pom</packaging>
 
     <version>1.0-SNAPSHOT</version>
-    <name>shjgit-server</name>
+    <name>shjgit</name>
 
-    <dependencies>
-        <dependency>
-            <groupId>org.spearce</groupId>
-            <artifactId>org.spearce.jgit</artifactId>
-            <version>0.4-SNAPSHOT</version>
-        </dependency>
+    <modules>
+        <module>shjgit-core</module>
+        <module>shjgit-standalone</module>
+    </modules>
 
-        <dependency>
-            <groupId>org.apache.sshd</groupId>
-            <artifactId>sshd-core</artifactId>
-            <version>1.0-SNAPSHOT</version>
-        </dependency>
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <java.lang.version>6</java.lang.version>
+    </properties>
 
-        <dependency>
-            <groupId>org.jsecurity</groupId>
-            <artifactId>jsecurity</artifactId>
-            <version>0.9.0</version>
-        </dependency>
+    <build>
+        <pluginManagement>
+            <plugins>
+                <plugin>
+                    <artifactId>maven-compiler-plugin</artifactId>
+                    <configuration>
+                        <source>1.${java.lang.version}</source>
+                        <target>1.${java.lang.version}</target>
+                    </configuration>
+                </plugin>
+            </plugins>
+        </pluginManagement>
+    </build>
 
-        <dependency>
-            <groupId>org.slf4j</groupId>
-            <artifactId>slf4j-simple</artifactId>
-            <version>1.4.3</version>
-        </dependency>
+    <repositories>
+        <repository>
+            <!--
+            jgit 0.5.0 is available here, released from branch
+            'git-release' at http://github.com/sonatype/JGit
+            -->
+            <id>people.struberg.repo</id>
+            <url>http://people.apache.org/~struberg/staging-repo</url>
+        </repository>
+    </repositories>
 
-    </dependencies>
+    <pluginRepositories>
+        <pluginRepository>
+            <id>onejar-maven-plugin.googlecode.com</id>
+            <url>http://onejar-maven-plugin.googlecode.com/svn/mavenrepo</url>
+        </pluginRepository>
+    </pluginRepositories>
+
 </project>

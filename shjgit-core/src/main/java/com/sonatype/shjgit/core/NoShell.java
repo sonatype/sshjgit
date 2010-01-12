@@ -11,21 +11,23 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-package com.sonatype.shjgit;
+package com.sonatype.shjgit.core;
+
+import org.apache.sshd.common.Factory;
+import org.apache.sshd.server.Command;
+import org.apache.sshd.server.Environment;
+import org.apache.sshd.server.ExitCallback;
+import org.eclipse.jgit.lib.Constants;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.util.Map;
-
-import org.apache.sshd.server.ShellFactory;
-import org.spearce.jgit.lib.Constants;
 
 /** Dummy shell which prints a message and terminates. */
-class NoShell implements ShellFactory {
+class NoShell implements Factory<Command> {
     @Override
-    public Shell createShell() {
-        return new Shell() {
+    public Command create() {
+        return new Command() {
             private InputStream in;
             private OutputStream out;
             private OutputStream err;
@@ -52,7 +54,7 @@ class NoShell implements ShellFactory {
             }
 
             @Override
-            public void start( Map<String, String> env ) throws IOException {
+            public void start( Environment env ) throws IOException {
                 err.write( Constants.encodeASCII( "shjgit: no shell available\n" ) );
                 in.close();
                 out.close();

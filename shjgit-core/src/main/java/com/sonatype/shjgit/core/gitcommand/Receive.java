@@ -11,25 +11,46 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-package com.sonatype.shjgit;
+package com.sonatype.shjgit.core.gitcommand;
 
 import java.io.IOException;
 
-import org.spearce.jgit.lib.PersonIdent;
-import org.spearce.jgit.transport.ReceivePack;
+import org.eclipse.jgit.lib.PersonIdent;
+import org.eclipse.jgit.transport.ReceivePack;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /** Receives change upload over SSH using the Git receive-pack protocol. */
 class Receive extends AbstractGitCommand {
+    private static final Logger log = LoggerFactory.getLogger( Receive.class );
+
     @Override
     protected void runImpl() throws IOException, Failure {
+        // TODO: Check Subject's permission to push to this repo.
         ReceivePack rp = new ReceivePack( repo );
         rp.setAllowCreates( true );
+        // TODO: Check Subject's permission to non-fast-forward. (delete is just an extreme form of non-fast-forward) NOTE: Don't fail if they lack that permission, just set these two to false:
         rp.setAllowDeletes( true );
         rp.setAllowNonFastForwards( true );
         rp.setCheckReceivedObjects( true );
         // TODO make this be a real email address!
-        rp.setRefLogIdent( new PersonIdent( userAccount.getPrincipal().toString(),
-                                            userAccount.getPrincipal().toString() + "@example.com" ) );
+        final String name;
+        if ( userAccount == null ) {
+            name = "null_userAccount";
+            log.warn( "userAccount was null when trying to setRefLogIdent on " +
+                    "repo." );
+        } else {
+            final Object principal = userAccount.getPrincipal();
+            if ( principal == null ){
+                name = "null_principal";
+                log.warn( "principal was null when trying to setRefLogIdent " +
+                        "on repo." );
+            }else{
+                name = principal.toString();
+            }
+        }
+        log.info("setting LogIdent to " + name);
+        rp.setRefLogIdent( new PersonIdent(name, name + "@example.com" ) );
         rp.receive( in, out, err );
     }
 
@@ -49,4 +70,7 @@ class Receive extends AbstractGitCommand {
         return new Failure( 1, builder.toString() );
     }
 
+    @Override
+    public void destroy() {
+    }
 }

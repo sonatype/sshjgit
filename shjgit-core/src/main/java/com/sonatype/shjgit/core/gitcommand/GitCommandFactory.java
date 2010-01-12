@@ -12,10 +12,11 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-package com.sonatype.shjgit;
+package com.sonatype.shjgit.core.gitcommand;
 
 import java.util.HashMap;
 
+import org.apache.sshd.server.Command;
 import org.apache.sshd.server.CommandFactory;
 
 /** Creates a command implementation based on the client input. */
@@ -29,6 +30,12 @@ public class GitCommandFactory implements CommandFactory {
             @Override
             public AbstractCommand create() {
                 return new Receive();
+            }
+        } );
+        commands.put( "git-upload-pack", new Factory() {
+            @Override
+            public AbstractCommand create() {
+                return new Upload();
             }
         } );
     }
@@ -75,7 +82,11 @@ public class GitCommandFactory implements CommandFactory {
         return new AbstractCommand() {
             @Override
             protected void run( String[] argv ) throws Failure {
-                throw new Failure( 127, "gerrit: " + getName() + ": not found" );
+                throw new Failure( 127, "shjgit: " + getName() + ": not found" );
+            }
+
+            @Override
+            public void destroy() {
             }
         };
     }

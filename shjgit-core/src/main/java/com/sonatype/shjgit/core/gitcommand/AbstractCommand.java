@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-package com.sonatype.shjgit;
+package com.sonatype.shjgit.core.gitcommand;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -20,9 +20,10 @@ import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.sshd.server.CommandFactory.Command;
-import org.apache.sshd.server.CommandFactory.ExitCallback;
-import org.apache.sshd.server.CommandFactory.SessionAware;
+import org.apache.sshd.server.Command;
+import org.apache.sshd.server.Environment;
+import org.apache.sshd.server.ExitCallback;
+import org.apache.sshd.server.SessionAware;
 import org.apache.sshd.server.session.ServerSession;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -107,7 +108,7 @@ abstract class AbstractCommand implements Command, SessionAware {
     }
 
     @Override
-    public void start() {
+    public void start(Environment env) {
         final String who = session.getUsername();
         new Thread( "Execute " + getName() + " [" + who + "]" ) {
             @Override
