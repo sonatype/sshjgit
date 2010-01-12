@@ -15,6 +15,7 @@ import java.util.Arrays;
 /**
  * Factory for constructing {@link SshServer}s which serve Git repositories.
  * 
+ * @author <a href="mailto:peter.royal@pobox.com">peter royal</a>
  * @author hugo@josefson.org
  */
 public class ServerFactory {
