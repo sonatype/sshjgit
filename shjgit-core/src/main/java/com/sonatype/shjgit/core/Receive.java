@@ -17,9 +17,13 @@ import java.io.IOException;
 
 import org.eclipse.jgit.lib.PersonIdent;
 import org.eclipse.jgit.transport.ReceivePack;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /** Receives change upload over SSH using the Git receive-pack protocol. */
 class Receive extends AbstractGitCommand {
+    private static final Logger log = LoggerFactory.getLogger( Receive.class );
+
     @Override
     protected void runImpl() throws IOException, Failure {
         // TODO: Check Subject's permission to push to this repo.
@@ -30,8 +34,23 @@ class Receive extends AbstractGitCommand {
         rp.setAllowNonFastForwards( true );
         rp.setCheckReceivedObjects( true );
         // TODO make this be a real email address!
-        rp.setRefLogIdent( new PersonIdent( userAccount.getPrincipal().toString(),
-                                            userAccount.getPrincipal().toString() + "@example.com" ) );
+        final String name;
+        if ( userAccount == null ) {
+            name = "null_userAccount";
+            log.warn( "userAccount was null when trying to setRefLogIdent on " +
+                    "repo." );
+        } else {
+            final Object principal = userAccount.getPrincipal();
+            if ( principal == null ){
+                name = "null_principal";
+                log.warn( "principal was null when trying to setRefLogIdent " +
+                        "on repo." );
+            }else{
+                name = principal.toString();
+            }
+        }
+        log.info("setting LogIdent to " + name);
+        rp.setRefLogIdent( new PersonIdent(name, name + "@example.com" ) );
         rp.receive( in, out, err );
     }
 
