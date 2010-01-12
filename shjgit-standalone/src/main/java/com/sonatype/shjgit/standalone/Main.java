@@ -53,17 +53,18 @@ public class Main {
     private static SecurityManager createSecurityManager() throws NoSuchProviderException, InvalidKeySpecException, NoSuchAlgorithmException, IOException {
         final String username = System.getProperty("user.name");
 
+        // this realm can authenticate passwords, and is considered the one which should perform authorization
         SimpleAccountRealm simpleAccountRealm = new SimpleAccountRealm("simpleAccountRealm");
         simpleAccountRealm.init();
         simpleAccountRealm.addAccount(username, "test");
 
+        // this realm contains allowed public keys for each username. it delegates all authorization to the realm injected in its constructor.
         SimplePublicKeyAuthenticatingRealm simplePublicKeyAuthenticatingRealm = new SimplePublicKeyAuthenticatingRealm(simpleAccountRealm);
         simplePublicKeyAuthenticatingRealm.addAccount(username, loadDefaultPublicKey());
 
+        // put both realms in the SecurityManager, so either can authenticate a user
         DefaultSecurityManager securityManager = new DefaultSecurityManager( Arrays.<Realm>asList( simpleAccountRealm, simplePublicKeyAuthenticatingRealm));
-
         securityManager.setCacheManager( new DefaultCacheManager() );
-
         return securityManager;
     }
 
