@@ -1,11 +1,21 @@
 package com.sonatype.shjgit.standalone;
 
+import com.sonatype.shjgit.core.SimplePublicKeyAuthenticatingRealm;
 import com.sonatype.shjgit.core.ServerFactory;
+import org.apache.mina.util.Base64;
 import org.apache.shiro.cache.DefaultCacheManager;
 import org.apache.shiro.mgt.DefaultSecurityManager;
 import org.apache.shiro.mgt.SecurityManager;
+import org.apache.shiro.realm.Realm;
 import org.apache.shiro.realm.SimpleAccountRealm;
 import org.apache.sshd.SshServer;
+import org.apache.sshd.common.util.Buffer;
+
+import java.security.NoSuchAlgorithmException;
+import java.security.NoSuchProviderException;
+import java.security.PublicKey;
+import java.security.spec.InvalidKeySpecException;
+import java.util.Arrays;
 
 /**
  * Main entry point
@@ -19,9 +29,10 @@ public class Main {
 
     public static void main( String... args ) throws Exception {
 
+        final SecurityManager securityManager = createSecurityManager();
         final SshServer server = new ServerFactory().createDefaultServer(
-                CONFIG_DIR, 2222, createSecurityManager());
-        
+                CONFIG_DIR, 2222, securityManager );
+
         server.start();
 
         Runtime.getRuntime().addShutdownHook( new Thread() {
@@ -35,17 +46,25 @@ public class Main {
         } );
     }
 
-    private static SecurityManager createSecurityManager() {
-        SimpleAccountRealm realm = new SimpleAccountRealm();
+    private static SecurityManager createSecurityManager() throws NoSuchProviderException, InvalidKeySpecException, NoSuchAlgorithmException {
+        final String username = System.getProperty("user.name");
 
-        realm.init();
+        SimpleAccountRealm simpleAccountRealm = new SimpleAccountRealm("simpleAccountRealm");
+        simpleAccountRealm.init();
+        simpleAccountRealm.addAccount(username, "test");
 
-        DefaultSecurityManager securityManager = new DefaultSecurityManager( realm );
+        SimplePublicKeyAuthenticatingRealm simplePublicKeyAuthenticatingRealm = new SimplePublicKeyAuthenticatingRealm(simpleAccountRealm);
+        simplePublicKeyAuthenticatingRealm.addAccount(username, loadDefaultPublicKey());
+
+        DefaultSecurityManager securityManager = new DefaultSecurityManager( Arrays.<Realm>asList( simpleAccountRealm, simplePublicKeyAuthenticatingRealm));
 
         securityManager.setCacheManager( new DefaultCacheManager() );
 
-        realm.addAccount( System.getProperty( "user.name" ), "test", "shjgit" );
-
         return securityManager;
     }
+
+    private static PublicKey loadDefaultPublicKey() throws NoSuchAlgorithmException, InvalidKeySpecException, NoSuchProviderException {
+        return new Buffer(Base64.decodeBase64("this would be the base64 encoded string from inside the id_rsa.pub file".getBytes())).getPublicKey();
+    }
+
 }

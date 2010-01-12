@@ -3,10 +3,12 @@ package com.sonatype.shjgit.core;
 import org.apache.shiro.mgt.SecurityManager;
 import org.apache.sshd.SshServer;
 import org.apache.sshd.common.NamedFactory;
+import org.apache.sshd.server.PublickeyAuthenticator;
 import org.apache.sshd.server.UserAuth;
+import org.apache.sshd.server.auth.UserAuthPublicKey;
 import org.apache.sshd.server.keyprovider.SimpleGeneratorHostKeyProvider;
 
-import java.util.Collections;
+import java.util.Arrays;
 
 /**
  * Simple {@link SshServer} which serves Git repositories.
@@ -29,8 +31,13 @@ public class ServerFactory {
         server.setKeyPairProvider( createHostKeyProvider( configDir ) );
         server.setShellFactory( new NoShell() );
         server.setCommandFactory( new GitCommandFactory() );
-        server.setUserAuthFactories( Collections.<NamedFactory<UserAuth>>singletonList(
-            new ShiroSecurityManagerUserAuthPassword.Factory( securityManager ) ) );
+        server.setUserAuthFactories( Arrays.<NamedFactory<UserAuth>>asList(
+                new UserAuthPublicKey.Factory( ),
+                new ShiroSecurityManagerUserAuthPassword.Factory( securityManager )
+        ) );
+
+        final PublickeyAuthenticator publickeyAuthenticator = new ShiroSecurityManagerPublickeyAuthenticator( securityManager );
+        server.setPublickeyAuthenticator( publickeyAuthenticator );
 
         return server;
     }
