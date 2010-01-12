@@ -1,11 +1,12 @@
-package com.sonatype.shjgit.core;
+package com.sonatype.shjgit.core.publickey;
 
+import com.sonatype.shjgit.core.publickey.PublicKeyAuthenticationToken;
+import com.sonatype.shjgit.core.publickey.PublicKeyWithEquals;
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.AuthenticationInfo;
 import org.apache.shiro.authc.AuthenticationToken;
 import org.apache.shiro.authc.SimpleAuthenticationInfo;
 import org.apache.shiro.authc.credential.CredentialsMatcher;
-import org.apache.shiro.authc.credential.SimpleCredentialsMatcher;
 import org.apache.shiro.authz.AuthorizationException;
 import org.apache.shiro.authz.Permission;
 import org.apache.shiro.realm.AuthenticatingRealm;
