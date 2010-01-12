@@ -16,23 +16,15 @@ import java.util.*;
 /**
  * Shiro {@link org.apache.shiro.realm.Realm} for authenticating {@link java.security.PublicKey}s.
  * Authorization is delegated to a different {@code Realm}.
+ * This implementation stores accounts internally in memory. For other storage
+ * options, it is advisable to subclass this and override {@link #addAccount(Object, java.util.Set)},
+ * {@link #hasAccount(Object)} and {@link #getPublicKeysForAccount(Object)}.
  */
 public class SimplePublicKeyAuthenticatingRealm extends AuthenticatingRealm {
 
     private static final Class<PublicKeyAuthenticationToken> AUTHENTICATION_TOKEN_CLASS = PublicKeyAuthenticationToken.class;
     private        final Map<Object, Set<PublicKey>>         accounts                   = new HashMap<Object, Set<PublicKey>>(); //principal-to-publickeys
     private        final AuthorizingRealm                    authorizingRealm;
-
-    public void addAccount(Object principal, PublicKey key){
-        final HashSet<PublicKey> publicKeys = new HashSet<PublicKey>(1);
-        publicKeys.add(key);
-        addAccount(principal, publicKeys);
-    }
-
-    public void addAccount(Object principal, Set<PublicKey> keys){
-        accounts.put(principal, keys);
-    }
-
 
     /**
      * Constructs this realm, accepting a realm to which all authorization will be delegated.
@@ -45,15 +37,57 @@ public class SimplePublicKeyAuthenticatingRealm extends AuthenticatingRealm {
         this.authorizingRealm = authorizingRealm;
     }
 
+    /**
+     * Convenience method for adding an account with only one key.
+     * @see #addAccount(Object, java.util.Set)
+     * @param principal the account's principal
+     * @param key the key this account is allowed to authenticate with
+     */
+    public void addAccount(Object principal, PublicKey key){
+        final HashSet<PublicKey> publicKeys = new HashSet<PublicKey>(1);
+        publicKeys.add(key);
+        addAccount(principal, publicKeys);
+    }
+
+    /**
+     * Adds an account with a set of keys the account is allowed to authenticate
+     * with.
+     * @param principal the account's principal
+     * @param keys the keys this account is allowed to authenticate with
+     */
+    public void addAccount(Object principal, Set<PublicKey> keys){
+        accounts.put(principal, keys);
+    }
+
     @Override
     protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken token) throws AuthenticationException {
         final Object principal = token.getPrincipal();
 
-        if ( !accounts.containsKey(principal) ){
+        if ( !hasAccount(principal)){
             return null;
         }
 
-        return new SimpleAuthenticationInfo(principal, accounts.get(principal), getName());
+        return new SimpleAuthenticationInfo(principal, getPublicKeysForAccount(principal), getName());
+    }
+
+    /**
+     * Retrieves an account's {@link PublicKey}s.
+     * This should be overridden by subclasses which store accounts differently.
+     * @param principal the principal to look up.
+     * @return a set of keys with which the account is allowed to authenticate.
+     */
+    protected Set<PublicKey> getPublicKeysForAccount(Object principal) {
+        return accounts.get(principal);
+    }
+
+    /**
+     * Checks to see if this realm has an account with the supplied principal.
+     * This should be overridden by subclasses which store accounts differently.
+     * @param principal the principal to look for. 
+     * @return {@code true} is the account is known, {@code false} otherwise.
+     */
+    protected boolean hasAccount(Object principal) {
+        return accounts.containsKey(principal);
     }
 
     //-------------------------------------------------------------------------
