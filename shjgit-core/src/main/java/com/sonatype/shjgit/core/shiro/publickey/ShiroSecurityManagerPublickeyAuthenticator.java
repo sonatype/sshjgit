@@ -1,5 +1,6 @@
 package com.sonatype.shjgit.core.shiro.publickey;
 
+import com.sonatype.shjgit.core.shiro.ShiroConstants;
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.mgt.SecurityManager;
 import org.apache.shiro.subject.Subject;
@@ -7,8 +8,6 @@ import org.apache.sshd.server.PublickeyAuthenticator;
 import org.apache.sshd.server.session.ServerSession;
 
 import java.security.PublicKey;
-
-import static com.sonatype.shjgit.core.shiro.password.ShiroSecurityManagerUserAuthPassword.SUBJECT;
 
 /**
  * A {@link PublickeyAuthenticator} that delegates to a Shiro {@link org.apache.shiro.mgt.SecurityManager} for
@@ -30,7 +29,7 @@ public class ShiroSecurityManagerPublickeyAuthenticator implements PublickeyAuth
             final Subject subject = securityManager.getSubject();
             subject.login( new PublicKeyAuthenticationToken( username, key ) );
 
-            session.setAttribute( SUBJECT, subject );
+            session.setAttribute( ShiroConstants.SUBJECT, subject );
 
             return true;
         } catch( AuthenticationException e ) {
