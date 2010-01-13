@@ -1,11 +1,16 @@
 package com.sonatype.shjgit.xstream;
 
+import com.sonatype.shjgit.core.util.SshKeyUtils;
 import org.apache.commons.io.FileUtils;
 import org.junit.After;
 import org.junit.Test;
 
 import java.io.File;
 import java.io.IOException;
+import java.security.NoSuchAlgorithmException;
+import java.security.NoSuchProviderException;
+import java.security.PublicKey;
+import java.security.spec.InvalidKeySpecException;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
@@ -64,6 +69,15 @@ public class XStreamFilePublicKeyRepositoryTest {
         repo = new XStreamFilePublicKeyRepository(xmlFile);
     }
 
+    @Test
+    public void givenAddedOneKeyAndReloadedFileThenEqualKeyExists() throws IOException, NoSuchProviderException, InvalidKeySpecException, NoSuchAlgorithmException {
+        givenEmptyFileThenFileHasEmptyMap();
+        final PublicKey key = loadDefaultPublicKey();
+        repo.addPublicKey("username", key);
+        repo = new XStreamFilePublicKeyRepository(xmlFile);
+        assertTrue(repo.getPublicKeys("username").contains(key));
+    }
+
     protected File createNewTempFile() throws IOException {
         return File.createTempFile("sshjgit-publickeys-", ".xml");
     }
@@ -73,4 +87,10 @@ public class XStreamFilePublicKeyRepositoryTest {
         assertTrue(file.mkdir());
         return file;
     }
+
+    private static PublicKey loadDefaultPublicKey() throws NoSuchAlgorithmException, InvalidKeySpecException, NoSuchProviderException, IOException {
+        final File file = new File(System.getProperty("user.home") + "/.ssh/id_rsa.pub");
+        return SshKeyUtils.toPublicKey(file);
+    }
+
 }
