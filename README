@@ -8,9 +8,9 @@ yourself. See http://incubator.apache.org/shiro/download.html
 The Main class is an example of how to set up the server. As you can see there,
 the starting point is to call ServerFactory and ask it to create a server for
 you. It needs a Shiro SecurityManager, which you should have created with one or
-more Shiro Realms of your choice. If you include an implementation of
-AbstractPublicKeyAuthenticatingRealm in the SecurityManager, your users will be
-able to use ssh public keys for authentication.
+more Shiro Realms of your choice. If you include a PublicKeyAuthenticatingRealm
+in the SecurityManager, your users will be able to use ssh public keys for
+authentication.
 
 The Main class is built by the shjgit-standalone module into a file which
 includes all dependency jars, so you can launch it with:

@@ -1,7 +1,8 @@
 package com.sonatype.shjgit.standalone;
 
-import com.sonatype.shjgit.core.shiro.publickey.SimplePublicKeyAuthenticatingRealm;
 import com.sonatype.shjgit.core.ServerFactory;
+import com.sonatype.shjgit.core.shiro.publickey.PublicKeyAuthenticatingRealm;
+import com.sonatype.shjgit.core.shiro.publickey.SimplePublicKeyRepository;
 import org.apache.commons.io.FileUtils;
 import org.apache.mina.util.Base64;
 import org.apache.shiro.cache.DefaultCacheManager;
@@ -59,11 +60,12 @@ public class Main {
         simpleAccountRealm.addAccount(username, "test");
 
         // this realm contains allowed public keys for each username. it delegates all authorization to the realm injected in its constructor.
-        SimplePublicKeyAuthenticatingRealm simplePublicKeyAuthenticatingRealm = new SimplePublicKeyAuthenticatingRealm(simpleAccountRealm);
-        simplePublicKeyAuthenticatingRealm.addAccount(username, loadDefaultPublicKey());
+        SimplePublicKeyRepository simplePublicKeyRepository = new SimplePublicKeyRepository();
+        simplePublicKeyRepository.addAccount(username, loadDefaultPublicKey());
+        PublicKeyAuthenticatingRealm publicKeyRealm = new PublicKeyAuthenticatingRealm(simplePublicKeyRepository, simpleAccountRealm);
 
         // put both realms in the SecurityManager, so either can authenticate a user
-        DefaultSecurityManager securityManager = new DefaultSecurityManager( Arrays.<Realm>asList( simpleAccountRealm, simplePublicKeyAuthenticatingRealm));
+        DefaultSecurityManager securityManager = new DefaultSecurityManager( Arrays.<Realm>asList( simpleAccountRealm, publicKeyRealm ));
         securityManager.setCacheManager( new DefaultCacheManager() );
         return securityManager;
     }

@@ -1,7 +1,5 @@
 package com.sonatype.shjgit.core.shiro.publickey;
 
-import org.apache.shiro.authz.Authorizer;
-
 import java.security.PublicKey;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -9,24 +7,13 @@ import java.util.Map;
 import java.util.Set;
 
 /**
- * {@code PublicKeyAuthenticatingRealm} which stores its accounts in memory.
+ * A {@code PublicKeyRepository} which stores its accounts in memory.
  *
  * @author hugo@josefson.org
  */
-public class SimplePublicKeyAuthenticatingRealm extends AbstractPublicKeyAuthenticatingRealm {
+public class SimplePublicKeyRepository implements PublicKeyRepository {
 
     private final Map<Object, Set<PublicKey>> accounts = new HashMap<Object, Set<PublicKey>>(); //principal-to-publickeys
-
-    /**
-     * Constructs this realm, accepting an {@code Authorizer} to which all
-     * authorization will be delegated.
-     *
-     * @param authorizer all authorization will be delegated to this. can be
-     *                   for example another {@link org.apache.shiro.realm.Realm}.
-     */
-    public SimplePublicKeyAuthenticatingRealm(Authorizer authorizer) {
-        super(authorizer);
-    }
 
     /**
      * Convenience method for adding an account with only one key.
@@ -51,12 +38,12 @@ public class SimplePublicKeyAuthenticatingRealm extends AbstractPublicKeyAuthent
     }
 
     @Override
-    protected Set<PublicKey> getPublicKeysForAccount(Object principal) {
+    public Set<PublicKey> getPublicKeysForAccount(Object principal) {
         return accounts.get(principal);
     }
 
     @Override
-    protected boolean hasAccount(Object principal) {
+    public boolean hasAccount(Object principal) {
         return accounts.containsKey(principal);
     }
 

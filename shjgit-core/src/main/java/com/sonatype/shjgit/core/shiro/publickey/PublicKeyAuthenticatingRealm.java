@@ -10,34 +10,41 @@ import org.apache.shiro.authz.Permission;
 import org.apache.shiro.realm.AuthenticatingRealm;
 import org.apache.shiro.subject.PrincipalCollection;
 
-import java.security.PublicKey;
 import java.util.Collection;
 import java.util.List;
-import java.util.Set;
 
 /**
  * Shiro {@link org.apache.shiro.realm.Realm} for authenticating {@link java.security.PublicKey}s.
- * Authorization is delegated to an {@link org.apache.shiro.authz.Authorizer},
- * which can be a different {@code Realm}.
+ * Authorization is delegated to a Shiro
+ * {@link org.apache.shiro.authz.Authorizer}, which can be a different
+ * {@link org.apache.shiro.realm.Realm}.
  *
- * Implement {@link #hasAccount(Object)} and
- * {@link #getPublicKeysForAccount(Object)}, in which you consult your accounts
- * backend.
- * 
+ * Implement a {@link PublicKeyRepository} in which you consult your own
+ * accounts backend, or use the
+ * {@link com.sonatype.shjgit.core.shiro.publickey.SimplePublicKeyRepository}
+ * for testing purposes.
+ *
+ * @see com.sonatype.shjgit.core.shiro.publickey.PublicKeyRepository
+ * @see org.apache.shiro.realm.Realm
+ *
  * @author hugo@josefson.org
  */
-public abstract class AbstractPublicKeyAuthenticatingRealm extends AuthenticatingRealm {
+public class PublicKeyAuthenticatingRealm extends AuthenticatingRealm {
     protected static final Class<PublicKeyAuthenticationToken> AUTHENTICATION_TOKEN_CLASS = PublicKeyAuthenticationToken.class;
     protected final Authorizer authorizer;
+    protected final PublicKeyRepository publicKeyRepository;
 
     /**
-     * Constructs this realm, accepting an {@code Authorizer} to which all
+     * Constructs this realm, accepting a {@code PublicKeyRepository} from which
+     * all keys will be fetched, and an {@code Authorizer} to which all
      * authorization will be delegated.
      *
+     * @param publicKeyRepository public keys will be looked up from this.
      * @param authorizer all authorization will be delegated to this. can be
      * for example another {@link org.apache.shiro.realm.Realm}.
      */
-    public AbstractPublicKeyAuthenticatingRealm(Authorizer authorizer) {
+    public PublicKeyAuthenticatingRealm(PublicKeyRepository publicKeyRepository, Authorizer authorizer) {
+        this.publicKeyRepository = publicKeyRepository;
         this.authorizer = authorizer;
         setAuthenticationTokenClass(AUTHENTICATION_TOKEN_CLASS);
         setCredentialsMatcher(new PublicKeyCredentialsMatcher());
@@ -47,29 +54,16 @@ public abstract class AbstractPublicKeyAuthenticatingRealm extends Authenticatin
     protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken token) throws AuthenticationException {
         final Object principal = token.getPrincipal();
 
-        if ( !hasAccount(principal)){
+        if ( !publicKeyRepository.hasAccount(principal)){
             return null;
         }
 
-        return new SimpleAuthenticationInfo(principal, getPublicKeysForAccount(principal), getName());
+        return new SimpleAuthenticationInfo(
+                principal,
+                publicKeyRepository.getPublicKeysForAccount(principal),
+                getName()
+        );
     }
-
-    /**
-     * Retrieves an account's {@link PublicKey}s.
-     * 
-     * @param principal the principal to look up.
-     * @return a set of keys with which the account is allowed to authenticate.
-     */
-    protected abstract Set<PublicKey> getPublicKeysForAccount(Object principal);
-
-    /**
-     * Checks to see if this realm has an account with the supplied principal.
-     *
-     * @param principal the principal to look for.
-     * @return {@code true} is the account is known, {@code false} otherwise.
-     */
-    protected abstract boolean hasAccount(Object principal);
-
 
     //-------------------------------------------------------------------------
     // Delegating all authorization
