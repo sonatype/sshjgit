@@ -23,7 +23,10 @@ public class XStreamFilePublicKeyRepository extends SimplePublicKeyRepository {
 
     public XStreamFilePublicKeyRepository(File storageFile) {
         this.storageFile = storageFile;
-        if (storageFile.exists()) {
+        if (storageFile.exists() && !storageFile.isFile()){
+            throw new IllegalArgumentException("storage file must be a file.");
+        }
+        if (storageFile.exists() && storageFile.length() > 0) {
             loadFromFile();
         } else {
             saveToFile();
