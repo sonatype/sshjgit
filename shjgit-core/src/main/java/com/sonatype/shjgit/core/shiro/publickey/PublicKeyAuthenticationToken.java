@@ -9,7 +9,7 @@ import java.security.PublicKey;
  *
  * @author hugo@josefson.org
  */
-public class PublicKeyAuthenticationToken implements AuthenticationToken {
+class PublicKeyAuthenticationToken implements AuthenticationToken {
     private final Object principal;
     private final PublicKey key;
 

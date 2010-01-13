@@ -14,7 +14,7 @@ import java.util.Set;
  *
  * @author hugo@josefson.org
  */
-public class PublicKeyCredentialsMatcher implements CredentialsMatcher {
+class PublicKeyCredentialsMatcher implements CredentialsMatcher {
 
     @Override
     public boolean doCredentialsMatch(AuthenticationToken token, AuthenticationInfo info) {
