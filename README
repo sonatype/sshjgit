@@ -12,10 +12,10 @@ more Shiro Realms of your choice. If you include a PublicKeyAuthenticatingRealm
 in the SecurityManager, your users will be able to use ssh public keys for
 authentication.
 
-The Main class is built by the shjgit-standalone module into a file which
+The Main class is built by the sshjgit-standalone module into a file which
 includes all dependency jars, so you can launch it with:
 
-  java -jar target/shjgit-standalone-*-executable.jar
+  java -jar target/sshjgit-standalone-*-executable.jar
 
 
 
