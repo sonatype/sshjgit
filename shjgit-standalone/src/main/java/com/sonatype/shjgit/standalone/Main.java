@@ -61,7 +61,7 @@ public class Main {
 
         // this realm contains allowed public keys for each username. it delegates all authorization to the realm injected in its constructor.
         SimplePublicKeyRepository simplePublicKeyRepository = new SimplePublicKeyRepository();
-        simplePublicKeyRepository.addAccount(username, loadDefaultPublicKey());
+        simplePublicKeyRepository.addPublicKey(username, loadDefaultPublicKey());
         PublicKeyAuthenticatingRealm publicKeyRealm = new PublicKeyAuthenticatingRealm(simplePublicKeyRepository, simpleAccountRealm);
 
         // put both realms in the SecurityManager, so either can authenticate a user

@@ -17,8 +17,9 @@ public interface PublicKeyRepository {
      *
      * @param principal the principal to look up.
      * @return a set of keys with which the account is allowed to authenticate.
+     *         never {@code null}.
      */
-    Set<PublicKey> getPublicKeysForAccount(Object principal);
+    Set<PublicKey> getPublicKeys(Object principal);
 
     /**
      * Checks to see if this repository has an account with the supplied principal.

@@ -60,7 +60,7 @@ public class PublicKeyAuthenticatingRealm extends AuthenticatingRealm {
 
         return new SimpleAuthenticationInfo(
                 principal,
-                publicKeyRepository.getPublicKeysForAccount(principal),
+                publicKeyRepository.getPublicKeys(principal),
                 getName()
         );
     }

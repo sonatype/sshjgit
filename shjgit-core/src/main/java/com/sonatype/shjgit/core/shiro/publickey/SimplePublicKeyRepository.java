@@ -1,10 +1,8 @@
 package com.sonatype.shjgit.core.shiro.publickey;
 
 import java.security.PublicKey;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
+import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 /**
  * A {@code PublicKeyRepository} which stores its accounts in memory.
@@ -13,38 +11,93 @@ import java.util.Set;
  */
 public class SimplePublicKeyRepository implements PublicKeyRepository {
 
-    private final Map<Object, Set<PublicKey>> accounts = new HashMap<Object, Set<PublicKey>>(); //principal-to-publickeys
+    /** principal-to-publickeys. note that you must use {@link #accountsLock}
+     * when touching this. */
+    private final Map<Object, Set<PublicKey>> accounts = new HashMap<Object, Set<PublicKey>>();
+
+    /** lock for {@link #accounts} */
+    private final ReentrantReadWriteLock accountsLock = new ReentrantReadWriteLock();
 
     /**
-     * Convenience method for adding an account with only one key.
-     * @see #addAccount(Object, java.util.Set)
+     * Adds one publicKey with which a specific principal will be allowed to
+     * authenticate.
+     *
      * @param principal the account's principal
-     * @param key the key this account is allowed to authenticate with
+     * @param publicKey the publicKey this principal will be allowed to authenticate with
+     * @see #addPublicKeys(Object, java.util.Set)
      */
-    public void addAccount(Object principal, PublicKey key){
+    public void addPublicKey(Object principal, PublicKey publicKey){
         final HashSet<PublicKey> publicKeys = new HashSet<PublicKey>(1);
-        publicKeys.add(key);
-        addAccount(principal, publicKeys);
+        publicKeys.add(publicKey);
+        addPublicKeys(principal, publicKeys);
     }
 
     /**
-     * Adds an account with a set of keys the account is allowed to authenticate
-     * with.
+     * Adds a set of publicKeys with which a specific principal will be allowed to
+     * authenticate.
      * @param principal the account's principal
-     * @param keys the keys this account is allowed to authenticate with
+     * @param publicKeys the publicKeys this principal is allowed to authenticate with
      */
-    public void addAccount(Object principal, Set<PublicKey> keys){
-        accounts.put(principal, keys);
+    public void addPublicKeys(Object principal, Set<PublicKey> publicKeys){
+        accountsLock.writeLock().lock();
+        try{
+            if (hasAccount(principal)){
+                accounts.get(principal).addAll(publicKeys);
+            }else{
+                accounts.put(principal, new HashSet<PublicKey>(publicKeys));
+            }
+        }finally{
+            accountsLock.writeLock().unlock();
+        }
+    }
+
+    /**
+     * Removes a {@code PublicKey} from the specified account.
+     *
+     * @param principal which account to remove the publicKey from
+     * @param publicKey the ssh public key
+     */
+    public void removePublicKey(Object principal, PublicKey publicKey){
+        accountsLock.readLock().lock();
+        try{
+            if (hasAccount(principal)){
+                accountsLock.writeLock().lock();
+                try{
+                    accounts.get(principal).remove(publicKey);
+                }finally{
+                    accountsLock.writeLock().unlock();
+                }
+            }else{
+                // good already
+            }
+        }finally {
+            accountsLock.readLock().unlock();
+        }
     }
 
     @Override
-    public Set<PublicKey> getPublicKeysForAccount(Object principal) {
-        return accounts.get(principal);
+    public Set<PublicKey> getPublicKeys(Object principal) {
+        accountsLock.readLock().lock();
+        try{
+            final Set<PublicKey> publicKeys = accounts.get(principal);
+            if (publicKeys != null) {
+                return new HashSet<PublicKey>(publicKeys);
+            } else {
+                return Collections.emptySet();
+            }
+        }finally {
+            accountsLock.readLock().unlock();
+        }
     }
 
     @Override
     public boolean hasAccount(Object principal) {
-        return accounts.containsKey(principal);
+        accountsLock.readLock().lock();
+        try{
+            return accounts.containsKey(principal);
+        }finally {
+            accountsLock.readLock().unlock();
+        }
     }
 
 }
