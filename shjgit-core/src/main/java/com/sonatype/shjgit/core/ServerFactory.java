@@ -50,12 +50,12 @@ public class ServerFactory {
     /**
      * Constructs a default configured {@link SshServer} for serving up Git repositories.
      *
-     * @param configDir directory where ssh server keys will be loaded/saved. {@code null} if they should not be loaded/saved.
      * @param port which port the ssh server should bind to.
      * @param securityManager the Shiro {@code SecurityManager} which you have preconfigured for authenticating users.
+     * @param configDir directory where ssh server keys will be loaded/saved. {@code null} if they should not be loaded/saved.
      * @return an {@code SshServer}, ready for you to {@link org.apache.sshd.SshServer#start()}. Please {@link org.apache.sshd.SshServer#stop()} it when it's time for your application to shut down.
      */
-    public SshServer createDefaultServer(String configDir, int port, SecurityManager securityManager) {
+    public SshServer createDefaultServer(int port, SecurityManager securityManager, String configDir) {
         final SimpleGeneratorHostKeyProvider hostKeyProvider = createHostKeyProvider(configDir);
         return createDefaultServer(port, securityManager, hostKeyProvider);
     }

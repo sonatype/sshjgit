@@ -35,7 +35,7 @@ public class Main {
 
         final SecurityManager securityManager = createSecurityManager();
         final SshServer server = new ServerFactory().createDefaultServer(
-                CONFIG_DIR, 2222, securityManager );
+                2222, securityManager, CONFIG_DIR );
 
         server.start();
 
