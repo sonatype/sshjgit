@@ -5,6 +5,7 @@ import com.sonatype.shjgit.core.shiro.password.ShiroSecurityManagerUserAuthPassw
 import com.sonatype.shjgit.core.shiro.publickey.ShiroSecurityManagerPublickeyAuthenticator;
 import org.apache.shiro.mgt.SecurityManager;
 import org.apache.sshd.SshServer;
+import org.apache.sshd.common.KeyPairProvider;
 import org.apache.sshd.common.NamedFactory;
 import org.apache.sshd.server.PublickeyAuthenticator;
 import org.apache.sshd.server.UserAuth;
@@ -23,16 +24,16 @@ public class ServerFactory {
     /**
      * Constructs a default configured {@link SshServer} for serving up Git repositories.
      *
-     * @param configDir directory where ssh server keys will be loaded/saved. {@code null} if they should not be loaded/saved.
      * @param port which port the ssh server should bind to.
      * @param securityManager the Shiro {@code SecurityManager} which you have preconfigured for authenticating users.
+     * @param hostKeyProvider provider of this server's ssh host keys
      * @return an {@code SshServer}, ready for you to {@link org.apache.sshd.SshServer#start()}. Please {@link org.apache.sshd.SshServer#stop()} it when it's time for your application to shut down.
      */
-    public SshServer createDefaultServer(String configDir, int port, SecurityManager securityManager) {
+    public SshServer createDefaultServer(int port, SecurityManager securityManager, KeyPairProvider hostKeyProvider) {
         final SshServer server = SshServer.setUpDefaultServer();
 
         server.setPort( port );
-        server.setKeyPairProvider( createHostKeyProvider( configDir ) );
+        server.setKeyPairProvider( hostKeyProvider );
         server.setShellFactory( new NoShell() );
         server.setCommandFactory( new GitCommandFactory() );
         server.setUserAuthFactories( Arrays.<NamedFactory<UserAuth>>asList(
@@ -44,6 +45,19 @@ public class ServerFactory {
         server.setPublickeyAuthenticator( publickeyAuthenticator );
 
         return server;
+    }
+
+    /**
+     * Constructs a default configured {@link SshServer} for serving up Git repositories.
+     *
+     * @param configDir directory where ssh server keys will be loaded/saved. {@code null} if they should not be loaded/saved.
+     * @param port which port the ssh server should bind to.
+     * @param securityManager the Shiro {@code SecurityManager} which you have preconfigured for authenticating users.
+     * @return an {@code SshServer}, ready for you to {@link org.apache.sshd.SshServer#start()}. Please {@link org.apache.sshd.SshServer#stop()} it when it's time for your application to shut down.
+     */
+    public SshServer createDefaultServer(String configDir, int port, SecurityManager securityManager) {
+        final SimpleGeneratorHostKeyProvider hostKeyProvider = createHostKeyProvider(configDir);
+        return createDefaultServer(port, securityManager, hostKeyProvider);
     }
 
     private SimpleGeneratorHostKeyProvider createHostKeyProvider( String configDir ) {
