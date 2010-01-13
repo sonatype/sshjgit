@@ -17,7 +17,7 @@ package com.sonatype.shjgit.core.gitcommand;
 import java.io.File;
 import java.io.IOException;
 
-import com.sonatype.shjgit.core.ShiroSecurityManagerUserAuthPassword;
+import com.sonatype.shjgit.core.shiro.password.ShiroSecurityManagerUserAuthPassword;
 import org.apache.shiro.subject.Subject;
 import org.eclipse.jgit.lib.Repository;
 import org.eclipse.jgit.lib.RepositoryConfig;

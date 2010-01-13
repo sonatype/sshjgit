@@ -1,6 +1,6 @@
 package com.sonatype.shjgit.standalone;
 
-import com.sonatype.shjgit.core.publickey.SimplePublicKeyAuthenticatingRealm;
+import com.sonatype.shjgit.core.shiro.publickey.SimplePublicKeyAuthenticatingRealm;
 import com.sonatype.shjgit.core.ServerFactory;
 import org.apache.commons.io.FileUtils;
 import org.apache.mina.util.Base64;

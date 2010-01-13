@@ -1,4 +1,4 @@
-package com.sonatype.shjgit.core.publickey;
+package com.sonatype.shjgit.core.shiro.publickey;
 
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.mgt.SecurityManager;
@@ -8,7 +8,7 @@ import org.apache.sshd.server.session.ServerSession;
 
 import java.security.PublicKey;
 
-import static com.sonatype.shjgit.core.ShiroSecurityManagerUserAuthPassword.SUBJECT;
+import static com.sonatype.shjgit.core.shiro.password.ShiroSecurityManagerUserAuthPassword.SUBJECT;
 
 /**
  * A {@link PublickeyAuthenticator} that delegates to a Shiro {@link org.apache.shiro.mgt.SecurityManager} for

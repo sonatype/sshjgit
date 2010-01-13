@@ -1,4 +1,4 @@
-package com.sonatype.shjgit.core.publickey;
+package com.sonatype.shjgit.core.shiro.publickey;
 
 import java.security.PublicKey;
 import java.util.Arrays;

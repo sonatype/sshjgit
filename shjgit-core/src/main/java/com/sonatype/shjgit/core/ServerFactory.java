@@ -1,7 +1,8 @@
 package com.sonatype.shjgit.core;
 
 import com.sonatype.shjgit.core.gitcommand.GitCommandFactory;
-import com.sonatype.shjgit.core.publickey.ShiroSecurityManagerPublickeyAuthenticator;
+import com.sonatype.shjgit.core.shiro.password.ShiroSecurityManagerUserAuthPassword;
+import com.sonatype.shjgit.core.shiro.publickey.ShiroSecurityManagerPublickeyAuthenticator;
 import org.apache.shiro.mgt.SecurityManager;
 import org.apache.sshd.SshServer;
 import org.apache.sshd.common.NamedFactory;

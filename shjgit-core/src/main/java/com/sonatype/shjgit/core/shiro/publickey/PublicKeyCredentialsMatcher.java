@@ -1,4 +1,4 @@
-package com.sonatype.shjgit.core.publickey;
+package com.sonatype.shjgit.core.shiro.publickey;
 
 import org.apache.shiro.authc.AuthenticationInfo;
 import org.apache.shiro.authc.AuthenticationToken;
