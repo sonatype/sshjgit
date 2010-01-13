@@ -13,10 +13,10 @@ public class SimplePublicKeyRepository implements PublicKeyRepository {
 
     /** principal-to-publickeys. note that you must use {@link #accountsLock}
      * when touching this. */
-    private final Map<Object, Set<PublicKey>> accounts = new HashMap<Object, Set<PublicKey>>();
+    protected final Map<Object, Set<PublicKey>> accounts = new HashMap<Object, Set<PublicKey>>();
 
     /** lock for {@link #accounts} */
-    private final ReentrantReadWriteLock accountsLock = new ReentrantReadWriteLock();
+    protected final ReentrantReadWriteLock accountsLock = new ReentrantReadWriteLock();
 
     /**
      * Adds one publicKey with which a specific principal will be allowed to
