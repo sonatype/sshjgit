@@ -1,4 +1,4 @@
-package com.sonatype.shjgit.core.publickey;
+package com.sonatype.shjgit.core.shiro.publickey;
 
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.AuthenticationInfo;
@@ -10,87 +10,59 @@ import org.apache.shiro.authz.Permission;
 import org.apache.shiro.realm.AuthenticatingRealm;
 import org.apache.shiro.subject.PrincipalCollection;
 
-import java.security.PublicKey;
-import java.util.*;
+import java.util.Collection;
+import java.util.List;
 
 /**
  * Shiro {@link org.apache.shiro.realm.Realm} for authenticating {@link java.security.PublicKey}s.
- * Authorization is delegated to an {@link org.apache.shiro.authz.Authorizer},
- * which can be a different {@code Realm}.
- * This implementation stores accounts internally in memory. For other storage
- * options, it is advisable to subclass this and override {@link #addAccount(Object, java.util.Set)},
- * {@link #hasAccount(Object)} and {@link #getPublicKeysForAccount(Object)}.
+ * Authorization is delegated to a Shiro
+ * {@link org.apache.shiro.authz.Authorizer}, which can be a different
+ * {@link org.apache.shiro.realm.Realm}.
+ *
+ * Implement a {@link PublicKeyRepository} in which you consult your own
+ * accounts backend, or use the
+ * {@link com.sonatype.shjgit.core.shiro.publickey.SimplePublicKeyRepository}
+ * for testing purposes.
+ *
+ * @see com.sonatype.shjgit.core.shiro.publickey.PublicKeyRepository
+ * @see org.apache.shiro.realm.Realm
+ *
+ * @author hugo@josefson.org
  */
-public class SimplePublicKeyAuthenticatingRealm extends AuthenticatingRealm {
-
-    private static final Class<PublicKeyAuthenticationToken> AUTHENTICATION_TOKEN_CLASS = PublicKeyAuthenticationToken.class;
-    private        final Map<Object, Set<PublicKey>>         accounts                   = new HashMap<Object, Set<PublicKey>>(); //principal-to-publickeys
-    private        final Authorizer                          authorizer;
+public class PublicKeyAuthenticatingRealm extends AuthenticatingRealm {
+    protected static final Class<PublicKeyAuthenticationToken> AUTHENTICATION_TOKEN_CLASS = PublicKeyAuthenticationToken.class;
+    protected final Authorizer authorizer;
+    protected final PublicKeyRepository publicKeyRepository;
 
     /**
-     * Constructs this realm, accepting an {@code Authorizer} to which all
+     * Constructs this realm, accepting a {@code PublicKeyRepository} from which
+     * all keys will be fetched, and an {@code Authorizer} to which all
      * authorization will be delegated.
      *
+     * @param publicKeyRepository public keys will be looked up from this.
      * @param authorizer all authorization will be delegated to this. can be
      * for example another {@link org.apache.shiro.realm.Realm}.
      */
-    public SimplePublicKeyAuthenticatingRealm(Authorizer authorizer) {
+    public PublicKeyAuthenticatingRealm(PublicKeyRepository publicKeyRepository, Authorizer authorizer) {
+        this.publicKeyRepository = publicKeyRepository;
+        this.authorizer = authorizer;
         setAuthenticationTokenClass(AUTHENTICATION_TOKEN_CLASS);
         setCredentialsMatcher(new PublicKeyCredentialsMatcher());
-        this.authorizer = authorizer;
-    }
-
-    /**
-     * Convenience method for adding an account with only one key.
-     * @see #addAccount(Object, java.util.Set)
-     * @param principal the account's principal
-     * @param key the key this account is allowed to authenticate with
-     */
-    public void addAccount(Object principal, PublicKey key){
-        final HashSet<PublicKey> publicKeys = new HashSet<PublicKey>(1);
-        publicKeys.add(key);
-        addAccount(principal, publicKeys);
-    }
-
-    /**
-     * Adds an account with a set of keys the account is allowed to authenticate
-     * with.
-     * @param principal the account's principal
-     * @param keys the keys this account is allowed to authenticate with
-     */
-    public void addAccount(Object principal, Set<PublicKey> keys){
-        accounts.put(principal, keys);
     }
 
     @Override
     protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken token) throws AuthenticationException {
         final Object principal = token.getPrincipal();
 
-        if ( !hasAccount(principal)){
+        if ( !publicKeyRepository.hasAccount(principal)){
             return null;
         }
 
-        return new SimpleAuthenticationInfo(principal, getPublicKeysForAccount(principal), getName());
-    }
-
-    /**
-     * Retrieves an account's {@link PublicKey}s.
-     * This should be overridden by subclasses which store accounts differently.
-     * @param principal the principal to look up.
-     * @return a set of keys with which the account is allowed to authenticate.
-     */
-    protected Set<PublicKey> getPublicKeysForAccount(Object principal) {
-        return accounts.get(principal);
-    }
-
-    /**
-     * Checks to see if this realm has an account with the supplied principal.
-     * This should be overridden by subclasses which store accounts differently.
-     * @param principal the principal to look for. 
-     * @return {@code true} is the account is known, {@code false} otherwise.
-     */
-    protected boolean hasAccount(Object principal) {
-        return accounts.containsKey(principal);
+        return new SimpleAuthenticationInfo(
+                principal,
+                publicKeyRepository.getPublicKeys(principal),
+                getName()
+        );
     }
 
     //-------------------------------------------------------------------------
@@ -171,5 +143,4 @@ public class SimplePublicKeyAuthenticatingRealm extends AuthenticatingRealm {
     public void checkRoles(PrincipalCollection subjectPrincipal, Collection<String> roleIdentifiers) throws AuthorizationException {
         authorizer.checkRoles(subjectPrincipal, roleIdentifiers);
     }
-
 }

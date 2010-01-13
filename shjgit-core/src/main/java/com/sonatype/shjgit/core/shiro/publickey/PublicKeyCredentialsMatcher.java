@@ -1,4 +1,4 @@
-package com.sonatype.shjgit.core.publickey;
+package com.sonatype.shjgit.core.shiro.publickey;
 
 import org.apache.shiro.authc.AuthenticationInfo;
 import org.apache.shiro.authc.AuthenticationToken;
@@ -14,7 +14,7 @@ import java.util.Set;
  *
  * @author hugo@josefson.org
  */
-public class PublicKeyCredentialsMatcher implements CredentialsMatcher {
+class PublicKeyCredentialsMatcher implements CredentialsMatcher {
 
     @Override
     public boolean doCredentialsMatch(AuthenticationToken token, AuthenticationInfo info) {

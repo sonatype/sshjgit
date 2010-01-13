@@ -1,0 +1,32 @@
+This project aims to be a very flexible git repo server, and should require no
+specific infrastructure. All authentication and authorization is delegated to
+Apache Shiro, which itself is very flexible.
+
+Before building this project, you currently have to build Shiro from source
+yourself. See http://incubator.apache.org/shiro/download.html
+
+The Main class is an example of how to set up the server. As you can see there,
+the starting point is to call ServerFactory and ask it to create a server for
+you. It needs a Shiro SecurityManager, which you should have created with one or
+more Shiro Realms of your choice. If you include a PublicKeyAuthenticatingRealm
+in the SecurityManager, your users will be able to use ssh public keys for
+authentication.
+
+The Main class is built by the shjgit-standalone module into a file which
+includes all dependency jars, so you can launch it with:
+
+  java -jar target/shjgit-standalone-*-executable.jar
+
+
+
+TODO and GOTCHAS:
+
+Currently, there is no authorization. All authenticated users are able to do
+everything.
+
+If a user pushes to a git repo path which does not already have a git repo in
+it, a git repo is automatically created there. That is likely not the desired
+behavior for all installations.
+
+The Main class example is mildly useful on its own. A proper server config and
+deployment mechanism is needed.
