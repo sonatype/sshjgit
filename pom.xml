@@ -12,6 +12,7 @@
 
     <modules>
         <module>sshjgit-core</module>
+        <module>sshjgit-testsupport</module>
         <module>sshjgit-xstream</module>
         <module>sshjgit-standalone</module>
     </modules>
