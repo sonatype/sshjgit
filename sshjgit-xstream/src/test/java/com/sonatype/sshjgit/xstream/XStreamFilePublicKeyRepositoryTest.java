@@ -7,6 +7,7 @@ import org.junit.Test;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.security.NoSuchAlgorithmException;
 import java.security.NoSuchProviderException;
 import java.security.PublicKey;
@@ -88,9 +89,9 @@ public class XStreamFilePublicKeyRepositoryTest {
         return file;
     }
 
-    private static PublicKey loadDefaultPublicKey() throws NoSuchAlgorithmException, InvalidKeySpecException, NoSuchProviderException, IOException {
-        final File file = new File(System.getProperty("user.home") + "/.ssh/id_rsa.pub");
-        return SshKeyUtils.toPublicKey(file);
+    private PublicKey loadDefaultPublicKey() throws NoSuchAlgorithmException, InvalidKeySpecException, NoSuchProviderException, IOException {
+        final InputStream inputStream = this.getClass().getResourceAsStream("/id_rsa.pub");
+        return SshKeyUtils.toPublicKey(inputStream);
     }
 
 }

@@ -1,11 +1,13 @@
 package com.sonatype.sshjgit.core.util;
 
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.IOUtils;
 import org.apache.mina.util.Base64;
 import org.apache.sshd.common.util.Buffer;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.security.NoSuchAlgorithmException;
 import java.security.NoSuchProviderException;
 import java.security.PublicKey;
@@ -29,6 +31,20 @@ public class SshKeyUtils {
      */
     public static PublicKey toPublicKey(File file) throws IOException, NoSuchAlgorithmException, InvalidKeySpecException, NoSuchProviderException {
         List<String> lines = FileUtils.readLines(file);
+        return toPublicKey(lines.get(0));
+    }
+
+    /**
+     * Reads the first line of an {@code InputStream} from an {@code id_rsa.pub} fie and parses it to a {@link PublicKey}.
+     * @param inputStream from the {@code id_rsa.pub} file
+     * @return a {@code PublicKey} instance
+     * @throws IOException if there is a problem reading the file
+     * @throws NoSuchAlgorithmException if {@link Buffer#getPublicKey()} has a problem with the key
+     * @throws InvalidKeySpecException if {@link Buffer#getPublicKey()} has a problem with the key
+     * @throws NoSuchProviderException if {@link Buffer#getPublicKey()} has a problem with the key
+     */
+    public static PublicKey toPublicKey(InputStream inputStream) throws IOException, NoSuchAlgorithmException, InvalidKeySpecException, NoSuchProviderException {
+        List<String> lines = IOUtils.readLines(inputStream);
         return toPublicKey(lines.get(0));
     }
 
