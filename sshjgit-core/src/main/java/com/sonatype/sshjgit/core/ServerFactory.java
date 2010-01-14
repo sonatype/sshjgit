@@ -12,6 +12,7 @@ import org.apache.sshd.server.UserAuth;
 import org.apache.sshd.server.auth.UserAuthPublicKey;
 import org.apache.sshd.server.keyprovider.SimpleGeneratorHostKeyProvider;
 
+import java.io.File;
 import java.util.Arrays;
 
 /**
@@ -25,17 +26,18 @@ public class ServerFactory {
      * Constructs a default configured {@link SshServer} for serving up Git repositories.
      *
      * @param port which port the ssh server should bind to.
+     * @param repoDirectory where the git repositories are stored
      * @param securityManager the Shiro {@code SecurityManager} which you have preconfigured for authenticating users.
      * @param hostKeyProvider provider of this server's ssh host keys
      * @return an {@code SshServer}, ready for you to {@link org.apache.sshd.SshServer#start()}. Please {@link org.apache.sshd.SshServer#stop()} it when it's time for your application to shut down.
      */
-    public SshServer createDefaultServer(int port, SecurityManager securityManager, KeyPairProvider hostKeyProvider) {
+    public SshServer createDefaultServer(int port, File repoDirectory, SecurityManager securityManager, KeyPairProvider hostKeyProvider) {
         final SshServer server = SshServer.setUpDefaultServer();
 
         server.setPort( port );
         server.setKeyPairProvider( hostKeyProvider );
         server.setShellFactory( new NoShell() );
-        server.setCommandFactory( new GitCommandFactory() );
+        server.setCommandFactory( new GitCommandFactory( repoDirectory ) );
         server.setUserAuthFactories( Arrays.<NamedFactory<UserAuth>>asList(
                 new UserAuthPublicKey.Factory( ),
                 new ShiroSecurityManagerUserAuthPassword.Factory( securityManager )
@@ -51,13 +53,14 @@ public class ServerFactory {
      * Constructs a default configured {@link SshServer} for serving up Git repositories.
      *
      * @param port which port the ssh server should bind to.
+     * @param repoDirectory
      * @param securityManager the Shiro {@code SecurityManager} which you have preconfigured for authenticating users.
      * @param configDir directory where ssh server keys will be loaded/saved. {@code null} if they should not be loaded/saved.
      * @return an {@code SshServer}, ready for you to {@link org.apache.sshd.SshServer#start()}. Please {@link org.apache.sshd.SshServer#stop()} it when it's time for your application to shut down.
      */
-    public SshServer createDefaultServer(int port, SecurityManager securityManager, String configDir) {
+    public SshServer createDefaultServer(int port, File repoDirectory, SecurityManager securityManager, String configDir) {
         final SimpleGeneratorHostKeyProvider hostKeyProvider = createHostKeyProvider(configDir);
-        return createDefaultServer(port, securityManager, hostKeyProvider);
+        return createDefaultServer(port, repoDirectory, securityManager, hostKeyProvider);
     }
 
     private SimpleGeneratorHostKeyProvider createHostKeyProvider( String configDir ) {

@@ -28,12 +28,13 @@ import java.util.Arrays;
  */
 public class Main {
     private static final String CONFIG_DIR = System.getProperty("user.dir");
+    private static final String REPO_DIR   = System.getProperty("user.dir");
 
     public static void main( String... args ) throws Exception {
 
         final SecurityManager securityManager = createSecurityManager();
         final SshServer server = new ServerFactory().createDefaultServer(
-                2222, securityManager, CONFIG_DIR );
+                2222, new File(REPO_DIR), securityManager, CONFIG_DIR );
 
         server.start();
 

@@ -13,6 +13,7 @@
 // limitations under the License.
 package com.sonatype.sshjgit.core.gitcommand;
 
+import java.io.File;
 import java.io.IOException;
 
 import org.eclipse.jgit.lib.PersonIdent;
@@ -23,6 +24,10 @@ import org.slf4j.LoggerFactory;
 /** Receives change upload over SSH using the Git receive-pack protocol. */
 class Receive extends AbstractGitCommand {
     private static final Logger log = LoggerFactory.getLogger( Receive.class );
+
+    Receive(File repoDir) {
+        super(repoDir);
+    }
 
     @Override
     protected void runImpl() throws IOException, Failure {

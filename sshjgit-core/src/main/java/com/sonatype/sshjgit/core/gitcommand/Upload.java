@@ -15,10 +15,15 @@ package com.sonatype.sshjgit.core.gitcommand;
 
 import org.eclipse.jgit.transport.UploadPack;
 
+import java.io.File;
 import java.io.IOException;
 
 /** Sends changes over SSH using the Git upload-pack protocol. */
 class Upload extends AbstractGitCommand {
+    Upload(File repoDir) {
+        super(repoDir);
+    }
+
     @Override
     protected void runImpl() throws IOException, Failure {
         // TODO: Check Subject's permission to read from this repo.

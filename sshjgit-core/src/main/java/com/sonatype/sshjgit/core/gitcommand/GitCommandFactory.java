@@ -14,6 +14,7 @@
 
 package com.sonatype.sshjgit.core.gitcommand;
 
+import java.io.File;
 import java.util.HashMap;
 
 import org.apache.sshd.server.Command;
@@ -23,19 +24,19 @@ import org.apache.sshd.server.CommandFactory;
 public class GitCommandFactory implements CommandFactory {
     private final HashMap<String, Factory> commands;
 
-    public GitCommandFactory() {
+    public GitCommandFactory(final File repoDirectory) {
         commands = new HashMap<String, Factory>();
 
         commands.put( "git-receive-pack", new Factory() {
             @Override
             public AbstractCommand create() {
-                return new Receive();
+                return new Receive(repoDirectory);
             }
         } );
         commands.put( "git-upload-pack", new Factory() {
             @Override
             public AbstractCommand create() {
-                return new Upload();
+                return new Upload(repoDirectory);
             }
         } );
     }

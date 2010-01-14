@@ -23,10 +23,15 @@ import org.eclipse.jgit.lib.Repository;
 import org.eclipse.jgit.lib.RepositoryConfig;
 
 abstract class AbstractGitCommand extends AbstractCommand {
+    protected final File repoDir;
     protected Repository repo;
     protected Subject userAccount;
     private static final String VALID_PROJECTNAME_REGEX =
             "[a-zA-Z0-9_][a-zA-Z0-9_.-]*(/[a-zA-Z0-9_][a-zA-Z0-9_.-]*)*";
+
+    public AbstractGitCommand(File repoDir) {
+        this.repoDir = repoDir;
+    }
 
     @Override
     protected final void run( String[] args ) throws IOException, Failure {
