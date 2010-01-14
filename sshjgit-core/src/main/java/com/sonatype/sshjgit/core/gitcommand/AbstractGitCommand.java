@@ -18,19 +18,38 @@ import java.io.File;
 import java.io.IOException;
 
 import com.sonatype.sshjgit.core.shiro.ShiroConstants;
+import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.subject.Subject;
 import org.eclipse.jgit.lib.Repository;
 import org.eclipse.jgit.lib.RepositoryConfig;
 
 abstract class AbstractGitCommand extends AbstractCommand {
-    protected final File repoDir;
+    protected final File reposRootDir;
+    protected final String reposRootDirPath;
     protected Repository repo;
     protected Subject userAccount;
     private static final String VALID_PROJECTNAME_REGEX =
             "[a-zA-Z0-9_][a-zA-Z0-9_.-]*(/[a-zA-Z0-9_][a-zA-Z0-9_.-]*)*";
 
-    public AbstractGitCommand(File repoDir) {
-        this.repoDir = repoDir;
+    public AbstractGitCommand(File reposRootDir) {
+        this.reposRootDir = reposRootDir;
+        this.reposRootDirPath = reposRootDir.getAbsolutePath();
+    }
+
+    /**
+     * Extracts the repo's directory path relative to the repo root, and
+     * converts slashes to colon, so that subdirectories become permission parts
+     * @param repo the git repo
+     * @return a colon separated string of directories, representing the repo's
+     * location in the repo root directory.
+     */
+    protected String getRepoNameAsPermissionParts(Repository repo) {
+        final String repoPath = repo.getDirectory().getAbsolutePath();
+        String relativePath = repoPath.replace(reposRootDirPath, "");
+        if (relativePath.startsWith("/")){
+            relativePath = relativePath.substring(1);
+        }
+        return relativePath.replace('/', ':');
     }
 
     @Override
@@ -66,7 +85,7 @@ abstract class AbstractGitCommand extends AbstractCommand {
         final RepositoryConfig repositoryConfig = repo.getConfig();
         if (!repositoryConfig.getFile().exists()) {
             // TODO: Check so any of the parent directories in the path leading up to this location, doesn't already contain a repo.
-            // TODO: Check Subject's permission to create a new repo in this directory.
+            SecurityUtils.getSubject().checkPermission("gitrepo:new:" + getRepoNameAsPermissionParts(repo));
             repo.create();
         }
 

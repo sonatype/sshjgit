@@ -24,19 +24,19 @@ import org.apache.sshd.server.CommandFactory;
 public class GitCommandFactory implements CommandFactory {
     private final HashMap<String, Factory> commands;
 
-    public GitCommandFactory(final File repoDirectory) {
+    public GitCommandFactory(final File reposRootDirectory) {
         commands = new HashMap<String, Factory>();
 
         commands.put( "git-receive-pack", new Factory() {
             @Override
             public AbstractCommand create() {
-                return new Receive(repoDirectory);
+                return new Receive(reposRootDirectory);
             }
         } );
         commands.put( "git-upload-pack", new Factory() {
             @Override
             public AbstractCommand create() {
-                return new Upload(repoDirectory);
+                return new Upload(reposRootDirectory);
             }
         } );
     }

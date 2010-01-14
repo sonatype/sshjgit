@@ -16,6 +16,8 @@ package com.sonatype.sshjgit.core.gitcommand;
 import java.io.File;
 import java.io.IOException;
 
+import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.subject.Subject;
 import org.eclipse.jgit.lib.PersonIdent;
 import org.eclipse.jgit.transport.ReceivePack;
 import org.slf4j.Logger;
@@ -25,18 +27,19 @@ import org.slf4j.LoggerFactory;
 class Receive extends AbstractGitCommand {
     private static final Logger log = LoggerFactory.getLogger( Receive.class );
 
-    Receive(File repoDir) {
-        super(repoDir);
+    Receive(File reposRootDir) {
+        super(reposRootDir);
     }
 
     @Override
     protected void runImpl() throws IOException, Failure {
-        // TODO: Check Subject's permission to push to this repo.
+        final Subject subject = SecurityUtils.getSubject();
+        subject.checkPermission("gitrepo:push:" + getRepoNameAsPermissionParts(repo));
         ReceivePack rp = new ReceivePack( repo );
         rp.setAllowCreates( true );
-        // TODO: Check Subject's permission to non-fast-forward. (delete is just an extreme form of non-fast-forward) NOTE: Don't fail if they lack that permission, just set these two to false:
-        rp.setAllowDeletes( true );
-        rp.setAllowNonFastForwards( true );
+        final boolean mayNonFastForward = subject.isPermitted("gitrepo:non-fast-forward:" + getRepoNameAsPermissionParts(repo));
+        rp.setAllowDeletes( mayNonFastForward );
+        rp.setAllowNonFastForwards( mayNonFastForward );
         rp.setCheckReceivedObjects( true );
         // TODO make this be a real email address!
         final String name;

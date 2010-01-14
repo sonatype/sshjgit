@@ -13,6 +13,7 @@
 // limitations under the License.
 package com.sonatype.sshjgit.core.gitcommand;
 
+import org.apache.shiro.SecurityUtils;
 import org.eclipse.jgit.transport.UploadPack;
 
 import java.io.File;
@@ -20,13 +21,13 @@ import java.io.IOException;
 
 /** Sends changes over SSH using the Git upload-pack protocol. */
 class Upload extends AbstractGitCommand {
-    Upload(File repoDir) {
-        super(repoDir);
+    Upload(File reposRootDir) {
+        super(reposRootDir);
     }
 
     @Override
     protected void runImpl() throws IOException, Failure {
-        // TODO: Check Subject's permission to read from this repo.
+        SecurityUtils.getSubject().checkPermission("gitrepo:fetch:" + getRepoNameAsPermissionParts(repo));
         UploadPack up = new UploadPack( repo );
         up.upload( in, out, err );
     }
