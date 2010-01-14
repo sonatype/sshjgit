@@ -21,12 +21,9 @@ includes all dependency jars, so you can launch it with:
 
 TODO and GOTCHAS:
 
-Currently, there is no authorization. All authenticated users are able to do
-everything.
-
 If a user pushes to a git repo path which does not already have a git repo in
-it, a git repo is automatically created there. That is likely not the desired
-behavior for all installations.
+it, a git repo is automatically created there (given permissions check out).
+That is likely not the desired behavior for all installations.
 
 The Main class example is mildly useful on its own. A proper server config and
 deployment mechanism is needed.
