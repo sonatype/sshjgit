@@ -9,6 +9,7 @@
 
     <version>1.0-SNAPSHOT</version>
     <name>sshjgit :: XStream Support</name>
+    <description>Support for using XStream.</description>
 
     <parent>
         <groupId>com.sonatype.sshjgit</groupId>

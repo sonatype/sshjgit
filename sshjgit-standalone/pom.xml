@@ -9,6 +9,7 @@
 
     <version>1.0-SNAPSHOT</version>
     <name>sshjgit :: Standalone</name>
+    <description>Example of standalone executable server.</description>
 
     <parent>
         <groupId>com.sonatype.sshjgit</groupId>

@@ -9,6 +9,7 @@
 
     <version>1.0-SNAPSHOT</version>
     <name>sshjgit :: Test Support</name>
+    <description>This module can be useful to depend on with scope=test. It contains ssh keys which must NEVER be used for securing anything, because their private keys are or have been out in the wild.</description>
 
     <parent>
         <groupId>com.sonatype.sshjgit</groupId>
