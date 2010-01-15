@@ -1,21 +1,18 @@
 package com.sonatype.sshjgit.xstream;
 
-import com.sonatype.sshjgit.core.util.SshKeyUtils;
 import org.apache.commons.io.FileUtils;
 import org.junit.After;
 import org.junit.Test;
 
 import java.io.File;
 import java.io.IOException;
-import java.io.InputStream;
 import java.security.NoSuchAlgorithmException;
 import java.security.NoSuchProviderException;
 import java.security.PublicKey;
 import java.security.spec.InvalidKeySpecException;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static com.sonatype.sshjgit.testsupport.TestUtils.*;
+import static org.junit.Assert.*;
 
 /**
  * Exercises the {@link XStreamFilePublicKeyRepository}.
@@ -34,7 +31,7 @@ public class XStreamFilePublicKeyRepositoryTest {
 
     @Test
     public void givenNonExistingFileThenRepoConstructsSuccessfully() throws IOException {
-        xmlFile = createNewTempFile();
+        xmlFile = createNewTempFile("publickeys");
         FileUtils.deleteQuietly(xmlFile);
         repo = new XStreamFilePublicKeyRepository(xmlFile);
     }
@@ -48,7 +45,7 @@ public class XStreamFilePublicKeyRepositoryTest {
 
     @Test
     public void givenEmptyFileThenRepoConstructsSuccessfully() throws IOException {
-        xmlFile = createNewTempFile();
+        xmlFile = createNewTempFile("publickeys");
         repo = new XStreamFilePublicKeyRepository(xmlFile);
     }
 
@@ -110,21 +107,6 @@ public class XStreamFilePublicKeyRepositoryTest {
         assertFalse(repo.getPublicKeys("username2").contains(key1));
         assertTrue(repo.getPublicKeys("username2").contains(key2));
         assertFalse(repo.getPublicKeys("username2").contains(key3));
-    }
-
-    protected File createNewTempFile() throws IOException {
-        return File.createTempFile("ssshjgit-publickeys-", ".xml");
-    }
-    protected File createNewTempDirectory() throws IOException {
-        final File file = createNewTempFile();
-        assertTrue(file.delete());
-        assertTrue(file.mkdir());
-        return file;
-    }
-
-    private PublicKey loadPublicKey(String classpathResource) throws NoSuchAlgorithmException, InvalidKeySpecException, NoSuchProviderException, IOException {
-        final InputStream inputStream = this.getClass().getResourceAsStream(classpathResource);
-        return SshKeyUtils.toPublicKey(inputStream);
     }
 
 }
