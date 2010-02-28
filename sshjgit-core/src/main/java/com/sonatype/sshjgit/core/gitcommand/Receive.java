@@ -13,15 +13,15 @@
 // limitations under the License.
 package com.sonatype.sshjgit.core.gitcommand;
 
-import java.io.File;
-import java.io.IOException;
-
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.subject.Subject;
 import org.eclipse.jgit.lib.PersonIdent;
 import org.eclipse.jgit.transport.ReceivePack;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.io.File;
+import java.io.IOException;
 
 /** Receives change upload over SSH using the Git receive-pack protocol. */
 class Receive extends AbstractGitCommand {
@@ -43,19 +43,12 @@ class Receive extends AbstractGitCommand {
         rp.setCheckReceivedObjects( true );
         // TODO make this be a real email address!
         final String name;
-        if ( userAccount == null ) {
-            name = "null_userAccount";
-            log.warn( "userAccount was null when trying to setRefLogIdent on " +
-                    "repo." );
-        } else {
-            final Object principal = userAccount.getPrincipal();
-            if ( principal == null ){
-                name = "null_principal";
-                log.warn( "principal was null when trying to setRefLogIdent " +
-                        "on repo." );
-            }else{
-                name = principal.toString();
-            }
+        final Object principal = subject.getPrincipal();
+        if ( principal == null ){
+            name = "null_principal";
+            log.warn( "principal was null when trying to setRefLogIdent on repo." );
+        }else{
+            name = principal.toString();
         }
         log.info("setting LogIdent to " + name);
         rp.setRefLogIdent( new PersonIdent(name, name + "@example.com" ) );

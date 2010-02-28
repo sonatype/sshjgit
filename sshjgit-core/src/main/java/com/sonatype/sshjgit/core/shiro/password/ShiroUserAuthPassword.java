@@ -1,6 +1,5 @@
 package com.sonatype.sshjgit.core.shiro.password;
 
-import com.sonatype.sshjgit.core.shiro.ShiroConstants;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.UsernamePasswordToken;
@@ -41,9 +40,6 @@ public class ShiroUserAuthPassword implements UserAuth {
         try {
             Subject subject = SecurityUtils.getSubject();
             subject.login( new UsernamePasswordToken( username, password ) );
-
-            session.setAttribute( ShiroConstants.SUBJECT, subject );
-
             return true;
         } catch( AuthenticationException e ) {
             throw new Exception( "Authentication failed: bad username or password supplied", e );

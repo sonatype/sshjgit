@@ -18,16 +18,15 @@ import org.apache.sshd.server.session.ServerSession;
  * @author hugo@josefson.org
  */
 class ShiroAwareSshServerSession extends ServerSession {
-    private final SecurityManager securityManager;
+    private final Subject subject;
 
     public ShiroAwareSshServerSession(SecurityManager securityManager, SshServer sshServer, IoSession ioSession) throws Exception {
         super(sshServer, ioSession);
-        this.securityManager = securityManager;
+        this.subject = new Subject.Builder(securityManager).buildSubject();
     }
 
     @Override
     protected void handleMessage(Buffer buffer) throws Exception {
-        Subject subject = new Subject.Builder(securityManager).buildSubject();
         ThreadState threadState = new SubjectThreadState(subject);
         threadState.bind();
         try {

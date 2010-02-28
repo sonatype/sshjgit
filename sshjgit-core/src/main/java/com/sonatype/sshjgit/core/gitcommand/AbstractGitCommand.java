@@ -14,20 +14,17 @@
 
 package com.sonatype.sshjgit.core.gitcommand;
 
-import java.io.File;
-import java.io.IOException;
-
-import com.sonatype.sshjgit.core.shiro.ShiroConstants;
 import org.apache.shiro.SecurityUtils;
-import org.apache.shiro.subject.Subject;
 import org.eclipse.jgit.lib.Repository;
 import org.eclipse.jgit.lib.RepositoryConfig;
+
+import java.io.File;
+import java.io.IOException;
 
 abstract class AbstractGitCommand extends AbstractCommand {
     protected final File reposRootDir;
     protected final String reposRootDirPath;
     protected Repository repo;
-    protected Subject userAccount;
     private static final String VALID_PROJECTNAME_REGEX =
             "[a-zA-Z0-9_][a-zA-Z0-9_.-]*(/[a-zA-Z0-9_][a-zA-Z0-9_.-]*)*";
 
@@ -88,8 +85,6 @@ abstract class AbstractGitCommand extends AbstractCommand {
             SecurityUtils.getSubject().checkPermission("gitrepo:new:" + getRepoNameAsPermissionParts(repo));
             repo.create();
         }
-
-        userAccount = session.getAttribute( ShiroConstants.SUBJECT );
 
         try {
             runImpl();

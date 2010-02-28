@@ -1,6 +1,5 @@
 package com.sonatype.sshjgit.core.shiro.publickey;
 
-import com.sonatype.sshjgit.core.shiro.ShiroConstants;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.subject.Subject;
@@ -21,9 +20,6 @@ public class ShiroPublickeyAuthenticator implements PublickeyAuthenticator{
         try {
             final Subject subject = SecurityUtils.getSubject();
             subject.login( new PublicKeyAuthenticationToken( username, key ) );
-
-            session.setAttribute( ShiroConstants.SUBJECT, subject );
-
             return true;
         } catch( AuthenticationException e ) {
             return false;
