@@ -1,8 +1,9 @@
 package com.sonatype.sshjgit.core;
 
 import com.sonatype.sshjgit.core.gitcommand.GitCommandFactory;
-import com.sonatype.sshjgit.core.shiro.password.ShiroSecurityManagerUserAuthPassword;
-import com.sonatype.sshjgit.core.shiro.publickey.ShiroSecurityManagerPublickeyAuthenticator;
+import com.sonatype.sshjgit.core.shiro.password.ShiroUserAuthPassword;
+import com.sonatype.sshjgit.core.shiro.publickey.ShiroPublickeyAuthenticator;
+import com.sonatype.sshjgit.core.shiro.session.ShiroAwareSshServerSessionFactory;
 import org.apache.shiro.mgt.SecurityManager;
 import org.apache.sshd.SshServer;
 import org.apache.sshd.common.KeyPairProvider;
@@ -40,10 +41,12 @@ public class ServerFactory {
         server.setCommandFactory( new GitCommandFactory( reposRootDirectory ) );
         server.setUserAuthFactories( Arrays.<NamedFactory<UserAuth>>asList(
                 new UserAuthPublicKey.Factory( ),
-                new ShiroSecurityManagerUserAuthPassword.Factory( securityManager )
+                new ShiroUserAuthPassword.Factory( )
         ) );
 
-        final PublickeyAuthenticator publickeyAuthenticator = new ShiroSecurityManagerPublickeyAuthenticator( securityManager );
+        server.setSessionFactory( new ShiroAwareSshServerSessionFactory( securityManager, server ) );
+
+        final PublickeyAuthenticator publickeyAuthenticator = new ShiroPublickeyAuthenticator( );
         server.setPublickeyAuthenticator( publickeyAuthenticator );
 
         return server;

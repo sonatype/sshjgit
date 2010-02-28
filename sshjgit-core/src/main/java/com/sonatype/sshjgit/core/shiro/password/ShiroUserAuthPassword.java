@@ -1,9 +1,9 @@
 package com.sonatype.sshjgit.core.shiro.password;
 
 import com.sonatype.sshjgit.core.shiro.ShiroConstants;
+import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.UsernamePasswordToken;
-import org.apache.shiro.mgt.SecurityManager;
 import org.apache.shiro.subject.Subject;
 import org.apache.sshd.common.NamedFactory;
 import org.apache.sshd.common.util.Buffer;
@@ -11,21 +11,13 @@ import org.apache.sshd.server.UserAuth;
 import org.apache.sshd.server.session.ServerSession;
 
 /**
- * A {@link UserAuth} that delegates to a Shiro {@link SecurityManager} for
- * authentication by password.
+ * A {@link UserAuth} that delegates to Shiro for authentication by password.
  *
  * @author <a href="mailto:peter.royal@pobox.com">peter royal</a>
  */
-public class ShiroSecurityManagerUserAuthPassword implements UserAuth {
-
-    private final SecurityManager securityManager;
+public class ShiroUserAuthPassword implements UserAuth {
 
     public static class Factory implements NamedFactory<UserAuth> {
-        private final SecurityManager securityManager;
-
-        public Factory( SecurityManager securityManager ) {
-            this.securityManager = securityManager;
-        }
 
         @Override
         public String getName() {
@@ -34,12 +26,8 @@ public class ShiroSecurityManagerUserAuthPassword implements UserAuth {
 
         @Override
         public UserAuth create() {
-            return new ShiroSecurityManagerUserAuthPassword( securityManager );
+            return new ShiroUserAuthPassword();
         }
-    }
-
-    public ShiroSecurityManagerUserAuthPassword( SecurityManager securityManager ) {
-        this.securityManager = securityManager;
     }
 
     @Override
@@ -51,7 +39,7 @@ public class ShiroSecurityManagerUserAuthPassword implements UserAuth {
         String password = buffer.getString();
 
         try {
-            Subject subject = securityManager.getSubject();
+            Subject subject = SecurityUtils.getSubject();
             subject.login( new UsernamePasswordToken( username, password ) );
 
             session.setAttribute( ShiroConstants.SUBJECT, subject );
