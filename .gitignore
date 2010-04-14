@@ -1,5 +1,8 @@
-target
 .idea
-*.iws
-*.ipr
 *.iml
+*.ipr
+*.iws
+.classpath
+.project
+.settings
+target
