@@ -15,7 +15,16 @@ import java.security.spec.InvalidKeySpecException;
 import java.util.List;
 
 /**
- * Utils related to ssh keys.
+ * <p>Utils related to ssh keys.</p>
+ * <p>The {@code toPublicKey} methods need an implementation of slf4j, and one way to give them that is to depend on slf4j-simple in the project where you call these methods from:</p>
+ * <pre>
+ *      &lt;dependency>
+ *          &lt;groupId>org.slf4j&lt;/groupId>
+ *          &lt;artifactId>slf4j-simple&lt;/artifactId>
+ *          &lt;version>1.4.3&lt;/version>
+ *          &lt;scope>compile&lt;/scope>
+ *      &lt;/dependency>
+ * </pre>
  *
  * @author hugo@josefson.org
  */
