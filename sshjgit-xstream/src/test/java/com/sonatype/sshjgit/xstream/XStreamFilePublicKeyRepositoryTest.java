@@ -4,6 +4,8 @@ import org.apache.commons.io.FileUtils;
 import org.junit.After;
 import org.junit.Test;
 
+import com.sonatype.sshjgit.testsupport.TestUtils;
+
 import java.io.File;
 import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
@@ -11,7 +13,6 @@ import java.security.NoSuchProviderException;
 import java.security.PublicKey;
 import java.security.spec.InvalidKeySpecException;
 
-import static com.sonatype.sshjgit.testsupport.TestUtils.*;
 import static org.junit.Assert.*;
 
 /**
@@ -31,7 +32,7 @@ public class XStreamFilePublicKeyRepositoryTest {
 
     @Test
     public void givenNonExistingFileThenRepoConstructsSuccessfully() throws IOException {
-        xmlFile = createNewTempFile("publickeys");
+        xmlFile = TestUtils.createNewTempFile("publickeys");
         FileUtils.deleteQuietly(xmlFile);
         repo = new XStreamFilePublicKeyRepository(xmlFile);
     }
@@ -45,7 +46,7 @@ public class XStreamFilePublicKeyRepositoryTest {
 
     @Test
     public void givenEmptyFileThenRepoConstructsSuccessfully() throws IOException {
-        xmlFile = createNewTempFile("publickeys");
+        xmlFile = TestUtils.createNewTempFile("publickeys");
         repo = new XStreamFilePublicKeyRepository(xmlFile);
     }
 
@@ -58,7 +59,7 @@ public class XStreamFilePublicKeyRepositoryTest {
 
     @Test(expected = IllegalArgumentException.class)
     public void givenDirectoryThenRepoConstructionFails() throws IOException {
-        xmlFile = createNewTempDirectory();
+        xmlFile = TestUtils.createNewTempDirectory();
         repo = new XStreamFilePublicKeyRepository(xmlFile);
     }
 
@@ -71,7 +72,7 @@ public class XStreamFilePublicKeyRepositoryTest {
     @Test
     public void givenAddedOneKeyAndReloadedFileThenEqualKeyExists() throws IOException, NoSuchProviderException, InvalidKeySpecException, NoSuchAlgorithmException {
         givenEmptyFileThenFileHasEmptyMap();
-        final PublicKey key = loadPublicKey("/id_rsa.pub");
+        final PublicKey key = TestUtils.loadPublicKey("/id_rsa.pub");
         repo.addPublicKey("username", key);
         repo = new XStreamFilePublicKeyRepository(xmlFile);
         assertTrue(repo.getPublicKeys("username").contains(key));
@@ -80,8 +81,8 @@ public class XStreamFilePublicKeyRepositoryTest {
     @Test
     public void givenAddedTwoKeysAndReloadedFileThenBothKeysExists() throws IOException, NoSuchProviderException, InvalidKeySpecException, NoSuchAlgorithmException {
         givenEmptyFileThenFileHasEmptyMap();
-        final PublicKey key1 = loadPublicKey("/id_rsa.pub");
-        final PublicKey key2 = loadPublicKey("/id_rsa2.pub");
+        final PublicKey key1 = TestUtils.loadPublicKey("/id_rsa.pub");
+        final PublicKey key2 = TestUtils.loadPublicKey("/id_rsa2.pub");
         repo.addPublicKey("username", key1);
         repo.addPublicKey("username", key2);
         repo = new XStreamFilePublicKeyRepository(xmlFile);
@@ -92,9 +93,9 @@ public class XStreamFilePublicKeyRepositoryTest {
     @Test
     public void givenAddedKeysToDifferentUsersAndReloadedFileThenKeysExistsInCorrectUserAndNotIncorrectUser() throws IOException, NoSuchProviderException, InvalidKeySpecException, NoSuchAlgorithmException {
         givenEmptyFileThenFileHasEmptyMap();
-        final PublicKey key1 = loadPublicKey("/id_rsa.pub");
-        final PublicKey key2 = loadPublicKey("/id_rsa2.pub");
-        final PublicKey key3 = loadPublicKey("/id_rsa3.pub");
+        final PublicKey key1 = TestUtils.loadPublicKey("/id_rsa.pub");
+        final PublicKey key2 = TestUtils.loadPublicKey("/id_rsa2.pub");
+        final PublicKey key3 = TestUtils.loadPublicKey("/id_rsa3.pub");
         repo.addPublicKey("username1", key1);
         repo.addPublicKey("username2", key2);
         repo.addPublicKey("username1", key3);

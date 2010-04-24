@@ -31,27 +31,4 @@
       <artifactId>commons-io</artifactId>
     </dependency>
   </dependencies>
-
-  <!-- 
-  <build>
-    <plugins>
-      <plugin>
-        <groupId>org.dstovall</groupId>
-        <artifactId>onejar-maven-plugin</artifactId>
-        <version>1.4.1</version>
-        <configuration>
-          <mainClass>com.sonatype.sshjgit.standalone.Main</mainClass>
-          <filename>${project.build.finalName}-executable.jar</filename>
-        </configuration>
-        <executions>
-          <execution>
-            <goals>
-              <goal>one-jar</goal>
-            </goals>
-          </execution>
-        </executions>
-      </plugin>
-    </plugins>
-  </build-->
-
 </project>

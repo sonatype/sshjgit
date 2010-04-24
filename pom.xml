@@ -15,6 +15,7 @@
     <module>sshjgit-testsupport</module>
     <module>sshjgit-xstream</module>
     <module>sshjgit-standalone</module>
+    <module>sshjgit-advice</module>
   </modules>
 
   <properties>
