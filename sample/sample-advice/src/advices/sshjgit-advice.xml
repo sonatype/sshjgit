@@ -5,7 +5,7 @@
         <provides>
           <provided namespace='org.sonatype.runtime.type' name='itar' version='1.0.0' />
         </provides>
-        <touchpoint id='org.sonatype.runtime.touchpoint' version='0.1.0' />
+        <touchpoint id='org.sonatype.tycho.p2.touchpoint' version='0.1.0' />
         <touchpointData>
           <instructions>
             <instruction key='install'>
@@ -22,11 +22,11 @@
       <appliesTransitively>true</appliesTransitively>
       <appliesTo>
         <includes>
-          <include>*:jar:*</include>
+          <include>org.apache.maven:maven-core</include>
         </includes>
       </appliesTo>
       <unit id="${maven:id}" version="${maven:osgiVersion}">
-        <touchpoint id='org.sonatype.runtime.touchpoint' version='0.1.0' />
+        <touchpoint id='org.sonatype.tycho.p2.touchpoint' version='0.1.0' />
         <touchpointData>
           <instructions>
             <instruction key='install'>

@@ -98,6 +98,19 @@
             <target>1.${java.lang.version}</target>
           </configuration>
         </plugin>
+        <plugin>
+          <groupId>org.sonatype.maven.plugins</groupId>
+          <artifactId>maven-p2-publisher-plugin</artifactId>
+          <version>0.1.0-SNAPSHOT</version>
+          <executions>
+            <execution>
+              <goals>
+                <goal>assemble</goal>
+                <goal>generate-assembly-xml</goal>
+              </goals>
+            </execution>
+          </executions>
+      </plugin>        
       </plugins>
     </pluginManagement>
   </build>

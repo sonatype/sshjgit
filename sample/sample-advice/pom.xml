@@ -38,7 +38,6 @@
                 <artifact>
                   <file>src/advices/sshjgit-advice.xml</file>
                   <type>advice</type>
-                  <classifier>maven-artifact</classifier>
                 </artifact>                        
               </artifacts>
             </configuration>

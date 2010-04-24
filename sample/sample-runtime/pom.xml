@@ -32,12 +32,12 @@
   <dependencies>
 
     <dependency>
-      <groupId>org.sonatype.runtime.g2.bars</groupId>
+      <groupId>org.sonatype.runtime.recipes.bars</groupId>
       <artifactId>bar-jsw</artifactId>
       <version>3.2.3-v0001-SNAPSHOT</version>
     </dependency>
     <dependency>
-      <groupId>org.sonatype.runtime.g2.advices</groupId>
+      <groupId>org.sonatype.runtime.recipes.advices</groupId>
       <artifactId>advice-generic</artifactId>
       <version>0.1.0-SNAPSHOT</version>
       <classifier>maven-artifact</classifier>
@@ -47,7 +47,6 @@
       <groupId>com.sonatype.sample</groupId>                                                                              
       <artifactId>sample-advice</artifactId>                                                                                     
       <version>1.0-SNAPSHOT</version>
-      <classifier>maven-artifact</classifier>
       <type>advice</type>
     </dependency>       
     <dependency>
@@ -59,16 +58,8 @@
   <build>
     <plugins>
       <plugin>
-        <groupId>org.sonatype.plugins</groupId>
-        <artifactId>maven-runtime-assembler-g2-plugin</artifactId>
-        <executions>
-          <execution>
-            <goals>
-              <goal>assemble</goal>
-              <goal>generate-assembly-xml</goal>
-            </goals>
-          </execution>
-        </executions>
+        <groupId>org.sonatype.maven.plugins</groupId>
+        <artifactId>maven-p2-publisher-plugin</artifactId>
       </plugin>
       <plugin>
         <artifactId>maven-assembly-plugin</artifactId>
