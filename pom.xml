@@ -16,6 +16,7 @@
     <module>sshjgit-xstream</module>
     <module>sshjgit-standalone</module>
     <module>sshjgit-advice</module>
+    <module>sshjgit-runtime</module>
   </modules>
 
   <properties>

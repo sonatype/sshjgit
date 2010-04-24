@@ -14,11 +14,8 @@
     <artifactId>sshjgit</artifactId>
     <version>1.0-SNAPSHOT</version>
   </parent>
-
-  <artifactId>recipe-jgit</artifactId>
-  <version>3.6.0-v0001-SNAPSHOT</version>
+  <artifactId>sshjgit-runtime</artifactId>
   <packaging>pom</packaging>
-
   <name>Tycho dmServer :: Recipe :: Equinox</name>
 
   <description>

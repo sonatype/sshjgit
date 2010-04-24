@@ -22,7 +22,7 @@
       <appliesTransitively>true</appliesTransitively>
       <appliesTo>
         <includes>
-          <include>*:*:jar</include>
+          <include>*:jar:*</include>
         </includes>
       </appliesTo>
       <unit id="${maven:id}" version="${maven:osgiVersion}">
