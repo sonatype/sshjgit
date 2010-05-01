@@ -40,7 +40,13 @@
       </unit>
     </advice>
     <advice>
-      <unit id='sshjgit:config:jsw' version='1.0.0'>         <touchpoint id='org.sonatype.tycho.p2.touchpoint' version='0.1.0' />
+      <appliesTo>
+        <includes>
+          <include>com.sonatype.sample:sample-runtime:pom</include>
+        </includes>
+      </appliesTo>    
+      <unit id='sshjgit:config:jsw' version='1.0.0'>
+        <touchpoint id='org.sonatype.tycho.p2.touchpoint' version='0.1.0' />
         <touchpointData>
           <instructions>
             <instruction key='configure'>
@@ -52,7 +58,7 @@
               jsw:addAppParameter( parameter:-console );
               jsw:addAppParameter( parameter:9000 );
               -->
-          </instruction>
+            </instruction>
             <instruction key='unconfigure'>
               jsw:removeAppParameter( parameter:com.sonatype.sshjgit.standalone.Main );
               <!--
@@ -61,7 +67,7 @@
               jsw:removeAppParameter( parameter:-console );
               jsw:removeAppParameter( parameter:9000 );
               -->
-          </instruction>
+            </instruction>
           </instructions>
         </touchpointData>
       </unit>
