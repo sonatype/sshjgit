@@ -42,7 +42,7 @@
     <advice>
       <appliesTo>
         <includes>
-          <include>com.sonatype.sample:sample-runtime:pom</include>
+          <include>com.sonatype.sshjgit:sshjgit-runtime:pom</include>
         </includes>
       </appliesTo>    
       <unit id='sshjgit:config:jsw' version='1.0.0'>
