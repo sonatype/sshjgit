@@ -35,14 +35,25 @@
             <instruction key='uninstall'>
               natives:remove( source:${artifact.location}, target:${installFolder}/${maven:runtimeDir}/lib/${maven:artifactId}.jar);
             </instruction>
+            <instruction key='configure'>
+              <!-- It would be nice to encapsulate this in a JSW instruction -->
+              jsw:addJavaClasspath( path:${installFolder}/${maven:runtimeDir}/lib/${maven:artifactId}.jar );
+            </instruction>
+            <instruction key='unconfigure'>
+              <!-- It would be nice to encapsulate this in a JSW instruction -->
+              jsw:removeJavaClasspath( path:${installFolder}/${maven:runtimeDir}/lib/${maven:artifactId}.jar );           
+            </instruction>            
           </instructions>
         </touchpointData>
       </unit>
     </advice>
     <advice>
-      <!--
-      <unit id='sshjgit:config:jsw' version='1.0.0'>       -->
-      <unit>
+      <appliesTo>
+        <includes>
+          <include>com.sonatype.sshjgit:sshjgit-runtime:pom</include>
+        </includes>
+      </appliesTo>    
+      <unit id='sshjgit:config:jsw' version='1.0.0'>
         <touchpoint id='org.sonatype.tycho.p2.touchpoint' version='0.1.0' />
         <touchpointData>
           <instructions>
@@ -55,7 +66,7 @@
               jsw:addAppParameter( parameter:-console );
               jsw:addAppParameter( parameter:9000 );
               -->
-          </instruction>
+            </instruction>
             <instruction key='unconfigure'>
               jsw:removeAppParameter( parameter:com.sonatype.sshjgit.standalone.Main );
               <!--
@@ -64,10 +75,10 @@
               jsw:removeAppParameter( parameter:-console );
               jsw:removeAppParameter( parameter:9000 );
               -->
-          </instruction>
+            </instruction>
           </instructions>
         </touchpointData>
       </unit>
-    </advice>    
+    </advice>        
   </advices>
 </assembly>

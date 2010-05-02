@@ -34,8 +34,8 @@ import java.util.Set;
  * @author <a href="mailto:peter.royal@pobox.com">peter royal</a>
  */
 public class Main {
-    private static final String CONFIG_DIR = System.getProperty("user.dir");
-    private static final String REPO_DIR   = System.getProperty("user.dir");
+    private static final String CONFIG_DIR = System.getProperty("user.dir") + "/jgitd";
+    private static final String REPO_DIR   = System.getProperty("user.dir") + "/jgitd";
 
     public static void main( String... args ) throws Exception {
 
@@ -86,7 +86,7 @@ public class Main {
     }
 
     private static PublicKey loadDefaultPublicKey() throws NoSuchAlgorithmException, InvalidKeySpecException, NoSuchProviderException, IOException {
-        final File file = new File(System.getProperty("user.home") + "/.ssh/id_rsa.pub");
+        final File file = new File(System.getProperty("user.home") + "/.ssh/id_dsa.pub");
         return SshKeyUtils.toPublicKey(file);
     }
 
@@ -122,6 +122,4 @@ public class Main {
             }
         };
     }
-
-
 }
