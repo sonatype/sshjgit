@@ -24,8 +24,8 @@
   </description>
 
   <properties>
-    <appName>equinox</appName>
-    <appLongName>Equinox</appLongName>    
+    <appName>sample</appName>
+    <appLongName>Sample</appLongName>    
     <runtimeDir>.</runtimeDir>
   </properties>
 
