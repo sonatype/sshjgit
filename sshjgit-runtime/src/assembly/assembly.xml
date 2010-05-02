@@ -13,7 +13,7 @@
   </formats>
   <includeBaseDirectory>false</includeBaseDirectory>
   <componentDescriptors>
-    <componentDescriptor>target/runtime-assembler/sra-assembly.xml</componentDescriptor>
+    <componentDescriptor>target/tycho-p2/assembly-descriptor.xml</componentDescriptor>
   </componentDescriptors>
 
 </assembly>

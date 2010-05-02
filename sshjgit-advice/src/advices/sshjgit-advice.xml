@@ -1,7 +1,7 @@
 <assembly>
   <advices>
     <advice>
-      <unit>
+      <unit id='sshjgit:layout:lib' version='1.0.0'>
         <provides>
           <provided namespace='org.sonatype.runtime.type' name='itar' version='1.0.0' />
         </provides>
@@ -48,11 +48,6 @@
       </unit>
     </advice>
     <advice>
-      <appliesTo>
-        <includes>
-          <include>com.sonatype.sshjgit:sshjgit-runtime:pom</include>
-        </includes>
-      </appliesTo>    
       <unit id='sshjgit:config:jsw' version='1.0.0'>
         <touchpoint id='org.sonatype.tycho.p2.touchpoint' version='0.1.0' />
         <touchpointData>
