@@ -48,11 +48,6 @@
       <version>1.0-SNAPSHOT</version>
       <type>advice</type>
     </dependency>       
-    <dependency>
-      <groupId>com.sonatype.sshjgit</groupId>                                                                              
-      <artifactId>sshjgit-standalone</artifactId>                                                                                     
-      <version>1.0-SNAPSHOT</version>
-    </dependency>    
   </dependencies>
 
   <build>

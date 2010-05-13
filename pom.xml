@@ -14,7 +14,6 @@
     <module>sshjgit-core</module>
     <module>sshjgit-testsupport</module>
     <module>sshjgit-xstream</module>
-    <module>sshjgit-standalone</module>
     <module>sshjgit-advice</module>
     <module>sshjgit-runtime</module>
   </modules>
@@ -27,6 +26,11 @@
 
   <dependencyManagement>
     <dependencies>
+      <dependency>
+        <groupId>org.sonatype.spice.inject</groupId>
+        <artifactId>spice-inject-imp</artifactId>
+        <version>1.0.0-SNAPSHOT</version>
+      </dependency>
       <dependency>
         <groupId>com.sonatype.sshjgit</groupId>
         <artifactId>sshjgit-core</artifactId>
@@ -84,6 +88,7 @@
         <artifactId>bcprov-jdk1${java.lang.version}</artifactId>
         <version>1.44</version>
       </dependency>
+
     </dependencies>
   </dependencyManagement>
 
@@ -109,7 +114,7 @@
               </goals>
             </execution>
           </executions>
-      </plugin>        
+        </plugin>
       </plugins>
     </pluginManagement>
   </build>
