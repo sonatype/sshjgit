@@ -20,7 +20,7 @@ import org.apache.shiro.authc.SimpleAccount;
 import org.apache.shiro.authz.Permission;
 import org.apache.shiro.authz.SimpleRole;
 import org.apache.shiro.authz.permission.WildcardPermission;
-import org.apache.shiro.cache.DefaultCacheManager;
+import org.apache.shiro.cache.MemoryConstrainedCacheManager;
 import org.apache.shiro.mgt.DefaultSecurityManager;
 import org.apache.shiro.realm.Realm;
 
@@ -57,7 +57,7 @@ public class GitSecurityManager extends DefaultSecurityManager {
 
         // put both realms in the SecurityManager, so either can authenticate a user
         setRealms( Arrays.<Realm>asList( simpleAccountRealm, publicKeyRealm ));
-        setCacheManager( new DefaultCacheManager() );
+        setCacheManager( new MemoryConstrainedCacheManager() );
     }
     
     private PublicKey loadDefaultPublicKey() throws NoSuchAlgorithmException, InvalidKeySpecException, NoSuchProviderException, IOException {

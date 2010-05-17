@@ -29,7 +29,10 @@
   </properties>
 
   <dependencies>
-
+    <dependency>
+      <groupId>org.sonatype.spice.inject</groupId>
+      <artifactId>spice-inject-imp</artifactId>
+    </dependency>
     <dependency>
       <groupId>org.sonatype.runtime.recipes.bars</groupId>
       <artifactId>bar-jsw</artifactId>
@@ -43,11 +46,11 @@
       <type>advice</type>
     </dependency>
     <dependency>
-      <groupId>com.sonatype.sshjgit</groupId>                                                                              
-      <artifactId>sshjgit-advice</artifactId>                                                                                     
+      <groupId>com.sonatype.sshjgit</groupId>
+      <artifactId>sshjgit-advice</artifactId>
       <version>1.0-SNAPSHOT</version>
       <type>advice</type>
-    </dependency>       
+    </dependency>
   </dependencies>
 
   <build>
