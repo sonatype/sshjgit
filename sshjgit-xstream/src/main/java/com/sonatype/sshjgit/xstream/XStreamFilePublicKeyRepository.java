@@ -1,15 +1,16 @@
 package com.sonatype.sshjgit.xstream;
 
-import com.sonatype.sshjgit.core.shiro.publickey.SimplePublicKeyRepository;
-import com.thoughtworks.xstream.XStream;
-import org.apache.commons.io.FileUtils;
-
 import java.io.File;
 import java.io.IOException;
 import java.security.PublicKey;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
+
+import org.apache.commons.io.FileUtils;
+import org.sonatype.security.realms.publickey.SimplePublicKeyRepository;
+
+import com.thoughtworks.xstream.XStream;
 
 /**
  * Stores and loads keys crudely in a file, using XStream.

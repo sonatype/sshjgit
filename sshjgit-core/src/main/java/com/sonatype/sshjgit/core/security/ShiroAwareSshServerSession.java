@@ -1,4 +1,4 @@
-package com.sonatype.sshjgit.core.shiro.session;
+package com.sonatype.sshjgit.core.security;
 
 import org.apache.mina.core.session.IoSession;
 import org.apache.shiro.mgt.SecurityManager;

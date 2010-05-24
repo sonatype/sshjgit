@@ -16,9 +16,9 @@ import org.apache.sshd.server.auth.UserAuthPublicKey;
 import org.apache.sshd.server.keyprovider.SimpleGeneratorHostKeyProvider;
 
 import com.sonatype.sshjgit.core.gitcommand.GitCommandFactory;
-import com.sonatype.sshjgit.core.shiro.password.ShiroUserAuthPassword;
-import com.sonatype.sshjgit.core.shiro.publickey.ShiroPublickeyAuthenticator;
-import com.sonatype.sshjgit.core.shiro.session.ShiroAwareSshServerSessionFactory;
+import com.sonatype.sshjgit.core.security.ShiroAwareSshServerSessionFactory;
+import com.sonatype.sshjgit.core.security.ShiroPublickeyAuthenticator;
+import com.sonatype.sshjgit.core.security.ShiroUserAuthPassword;
 
 // Pluggable transport, can I use anything but SSHD right now? SmartHTTPS?
 // Pluggable security manager

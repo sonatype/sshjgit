@@ -1,12 +1,13 @@
-package com.sonatype.sshjgit.core.shiro.publickey;
+package com.sonatype.sshjgit.core.security;
+
+import java.security.PublicKey;
 
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.subject.Subject;
 import org.apache.sshd.server.PublickeyAuthenticator;
 import org.apache.sshd.server.session.ServerSession;
-
-import java.security.PublicKey;
+import org.sonatype.security.realms.publickey.PublicKeyAuthenticationToken;
 
 /**
  * A {@link PublickeyAuthenticator} that delegates to Shiro for authentication by {@link PublicKey}.

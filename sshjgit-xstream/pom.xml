@@ -40,6 +40,14 @@
       <artifactId>junit</artifactId>
       <scope>test</scope>
     </dependency>
+    
+    <dependency>
+      <groupId>org.sonatype.security.realms</groupId>
+      <artifactId>security-public-key-realm</artifactId>
+      <version>${sonatype-security.version}</version>
+      <scope>test</scope>
+      <classifier>tests</classifier>
+    </dependency>
   </dependencies>
 
 </project>

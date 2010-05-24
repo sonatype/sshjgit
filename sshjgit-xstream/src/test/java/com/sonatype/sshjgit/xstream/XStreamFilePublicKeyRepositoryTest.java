@@ -1,10 +1,8 @@
 package com.sonatype.sshjgit.xstream;
 
-import org.apache.commons.io.FileUtils;
-import org.junit.After;
-import org.junit.Test;
-
-import com.sonatype.sshjgit.testsupport.TestUtils;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 import java.io.File;
 import java.io.IOException;
@@ -13,14 +11,22 @@ import java.security.NoSuchProviderException;
 import java.security.PublicKey;
 import java.security.spec.InvalidKeySpecException;
 
-import static org.junit.Assert.*;
+import junit.framework.Assert;
+
+import org.apache.commons.io.FileUtils;
+import org.junit.After;
+import org.junit.Test;
+import org.sonatype.security.realms.publickey.PublicKeyRepository;
+import org.sonatype.security.realms.publickey.PublicKeyRepositoryTest;
+
+import com.sonatype.sshjgit.testsupport.TestUtils;
 
 /**
  * Exercises the {@link XStreamFilePublicKeyRepository}.
  *
  * @author hugo@josefson.org
  */
-public class XStreamFilePublicKeyRepositoryTest {
+public class XStreamFilePublicKeyRepositoryTest extends PublicKeyRepositoryTest {
     protected File xmlFile;
     protected XStreamFilePublicKeyRepository repo;
     protected static final String UTF_8 = "UTF-8";
@@ -28,6 +34,19 @@ public class XStreamFilePublicKeyRepositoryTest {
     @After
     public void tearDown(){
         FileUtils.deleteQuietly(xmlFile);
+    }
+    
+    protected PublicKeyRepository getPublicKeyRepository()
+    {
+        try
+        {
+            givenEmptyFileThenFileHasEmptyMap();
+        }
+        catch ( IOException e )
+        {
+            Assert.fail( "Failed to construct xml file for PublicKey storage." );
+        }
+        return new XStreamFilePublicKeyRepository(xmlFile);
     }
 
     @Test

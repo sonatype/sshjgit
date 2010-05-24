@@ -52,6 +52,10 @@
       <scope>test</scope>
     </dependency>
     <dependency>
+      <groupId>org.sonatype.security.realms</groupId>
+      <artifactId>security-public-key-realm</artifactId>
+    </dependency>
+    <dependency>
       <groupId>junit</groupId>
       <artifactId>junit</artifactId>
       <scope>test</scope>

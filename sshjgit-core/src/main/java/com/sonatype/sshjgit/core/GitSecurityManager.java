@@ -23,10 +23,10 @@ import org.apache.shiro.authz.permission.WildcardPermission;
 import org.apache.shiro.cache.MemoryConstrainedCacheManager;
 import org.apache.shiro.mgt.DefaultSecurityManager;
 import org.apache.shiro.realm.Realm;
+import org.sonatype.security.realms.publickey.PublicKeyAuthenticatingRealm;
+import org.sonatype.security.realms.publickey.SimplePublicKeyRepository;
 
-import com.sonatype.sshjgit.core.shiro.RolePermissionsAwareSimpleAccountRealm;
-import com.sonatype.sshjgit.core.shiro.publickey.PublicKeyAuthenticatingRealm;
-import com.sonatype.sshjgit.core.shiro.publickey.SimplePublicKeyRepository;
+import com.sonatype.sshjgit.core.security.RolePermissionsAwareSimpleAccountRealm;
 import com.sonatype.sshjgit.core.util.SshKeyUtils;
 
 @Singleton
@@ -53,7 +53,7 @@ public class GitSecurityManager extends DefaultSecurityManager {
         //
         SimplePublicKeyRepository simplePublicKeyRepository = new SimplePublicKeyRepository();
         simplePublicKeyRepository.addPublicKey(username, loadDefaultPublicKey());
-        PublicKeyAuthenticatingRealm publicKeyRealm = new PublicKeyAuthenticatingRealm(simplePublicKeyRepository, simpleAccountRealm);
+        PublicKeyAuthenticatingRealm publicKeyRealm = new PublicKeyAuthenticatingRealm(simplePublicKeyRepository);
 
         // put both realms in the SecurityManager, so either can authenticate a user
         setRealms( Arrays.<Realm>asList( simpleAccountRealm, publicKeyRealm ));

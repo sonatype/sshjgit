@@ -1,10 +1,11 @@
-package com.sonatype.sshjgit.core.shiro;
+package com.sonatype.sshjgit.core.security;
 
 import org.apache.shiro.authc.SimpleAccount;
 import org.apache.shiro.authz.AuthorizationInfo;
 import org.apache.shiro.authz.Permission;
 import org.apache.shiro.authz.SimpleAuthorizationInfo;
 import org.apache.shiro.authz.SimpleRole;
+import org.apache.shiro.authz.permission.RolePermissionResolverAware;
 import org.apache.shiro.realm.SimpleAccountRealm;
 import org.apache.shiro.subject.PrincipalCollection;
 
@@ -27,14 +28,16 @@ import java.util.Set;
  * <p>When an account is member of a group, it is considered to have all
  * {@code Permission}s of the group in addition to its own specific
  * {@code Permission}s.</p>
- *
+ * 
  * <p>
- * TODO: actually improve SimpleAccountRealm within the Apache Shiro project.
+ * TODO: actually improve SimpleAccountRealm within the Apache Shiro project.  {@link RolePermissionResolverAware}
+ * 
+ * TODO: Consider Removing from core, and push into test or a simple/sample project.
  * </p>
  *
  * @author hugo@josefson.org
  */
-public class RolePermissionsAwareSimpleAccountRealm extends SimpleAccountRealm{
+public class RolePermissionsAwareSimpleAccountRealm extends SimpleAccountRealm {
 
     public RolePermissionsAwareSimpleAccountRealm() {
     }

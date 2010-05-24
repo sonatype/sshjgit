@@ -1,4 +1,9 @@
-package com.sonatype.sshjgit.core.shiro;
+package com.sonatype.sshjgit.core.security;
+
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.Set;
 
 import org.apache.shiro.authc.SimpleAccount;
 import org.apache.shiro.authz.AuthorizationInfo;
@@ -8,10 +13,7 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.util.Collection;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.Set;
+import com.sonatype.sshjgit.core.security.RolePermissionsAwareSimpleAccountRealm;
 
 /**
  * @author hugo@josefson.org

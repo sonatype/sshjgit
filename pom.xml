@@ -22,6 +22,7 @@
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <java.lang.version>6</java.lang.version>
     <jgitVersion>0.8.0-SNAPSHOT</jgitVersion>
+    <sonatype-security.version>2.0.0-SNAPSHOT</sonatype-security.version>
   </properties>
 
   <dependencyManagement>
@@ -92,6 +93,11 @@
         <groupId>org.bouncycastle</groupId>
         <artifactId>bcprov-jdk1${java.lang.version}</artifactId>
         <version>1.44</version>
+      </dependency>
+       <dependency>
+        <groupId>org.sonatype.security.realms</groupId>
+        <artifactId>security-public-key-realm</artifactId>
+        <version>${sonatype-security.version}</version>
       </dependency>
 
     </dependencies>
